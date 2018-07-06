@@ -5,10 +5,10 @@
 		<artifactId>pom-scijava</artifactId>
 		<version>17.1.1</version>
 	</parent>
-	<groupId>net.imglib2.practice</groupId>
-	<artifactId>imagej-clustering</artifactId>
-	<version>0.0.2-SNAPSHOT</version>
-	<name>imagej-clustering</name>
+	<groupId>net.preibischlab.singlecellfly</groupId>
+	<artifactId>single_cell_fly</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>single_cell_fly</name>
 	<properties><enforcer.skip>true</enforcer.skip></properties>
 	
 	<dependencies>
