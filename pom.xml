@@ -24,38 +24,25 @@
 			<groupId>net.imglib2</groupId>
 			<artifactId>imglib2-ij</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>net.imglib2</groupId>
-			<artifactId>imglib2-ui</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>net.imglib2</groupId>
-			<artifactId>imglib2-realtransform</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>net.imglib2</groupId>
-			<artifactId>imglib2-algorithm</artifactId>
-		</dependency>
 		 <dependency>
     <groupId>io.scif</groupId>
     <artifactId>scifio</artifactId>
-  </dependency>
-  <dependency>
-    <groupId>io.scif</groupId>
-    <artifactId>scifio-bf-compat</artifactId>
-    <scope>runtime</scope>
-  </dependency>
-  <!-- The formats-bsd component adds support for open formats. -->
-  <dependency>
-    <groupId>ome</groupId>
-    <artifactId>formats-bsd</artifactId>
-    <scope>runtime</scope>
   </dependency>
   <!-- The formats-gpl component adds support for proprietary formats. -->
   <dependency>
     <groupId>ome</groupId>
     <artifactId>formats-gpl</artifactId>
     <scope>runtime</scope>
+  </dependency>
+  <dependency>
+    <groupId>com.google.code.gson</groupId>
+    <artifactId>gson</artifactId>
+    <version>2.2.4</version>
+</dependency>
+  <dependency>
+      <groupId>me.tongfei</groupId>
+      <artifactId>progressbar</artifactId>
+      <version>0.7.2</version>
   </dependency>
 	</dependencies>
 

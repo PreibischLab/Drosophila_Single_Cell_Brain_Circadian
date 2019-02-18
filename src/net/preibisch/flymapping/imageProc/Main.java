@@ -1,11 +1,11 @@
-package main;
+package net.preibisch.flymapping.imageProc;
 
 import java.io.File;
 
-import net.imglib2.FinalDimensions;
 import net.imglib2.img.Img;
 import net.imglib2.type.numeric.real.FloatType;
-import tools.IOFunctions;
+import net.preibisch.flymapping.tools.IOFunctions;
+
 
 public class Main {
 

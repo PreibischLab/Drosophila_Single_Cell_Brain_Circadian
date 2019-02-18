@@ -1,4 +1,4 @@
-package tools;
+package net.preibisch.flymapping.tools;
 
 import java.io.BufferedOutputStream;
 import java.io.DataOutputStream;
@@ -11,7 +11,6 @@ import java.util.Random;
 
 import org.apache.commons.io.FileUtils;
 
-import tools.MyCallBack;
 import ij.ImagePlus;
 import ij.VirtualStack;
 import ij.io.FileInfo;

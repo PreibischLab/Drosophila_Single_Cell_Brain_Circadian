@@ -1,4 +1,4 @@
-package tools;
+package net.preibisch.flymapping.tools;
 
 public interface MyCallBack {
 	void onSuccess();
