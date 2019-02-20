@@ -6,12 +6,12 @@ import java.nio.file.Paths;
 
 public class SerializeDataMain {
 	public static void main(String[] args) throws IOException {
-		prepare_aerts_57k_cells_raw();
+//		prepare_aerts_57k_cells_raw();
 		
 //		prepare_dros_lines();
 //		getTop3DrosLines();
 		
-		
+		getExpressedCellsInGenes();
 
 //		Path aerts_57k_cells_raw_path = Paths.get(SeqPaths.aerts_57k_cells_test_json);
 //		TxtProcess.infos(aerts_57k_cells_raw_path);
@@ -40,11 +40,21 @@ public class SerializeDataMain {
 			System.out.println("Start prepare aerts 57k cells raw ");
 			Path aerts_57k_cells_raw_path = Paths.get(SeqPaths.SEQUENCING_FOLDER,SeqPaths.aerts_57k_cells_raw);
 			String aerts_57k_cells_raw_output_folder = Paths.get(SeqPaths.SEQUENCING_FOLDER,SeqPaths.aerts_57k_cells_raw_folder).toString();
-			int chuncks = Aerts_57k_cells.toChuncks(aerts_57k_cells_raw_path,aerts_57k_cells_raw_output_folder,SeqPaths.aerts_57k_cells_raw_folder,100);
+			int chuncks = Aerts_57k_cells.toChuncks(aerts_57k_cells_raw_path,aerts_57k_cells_raw_output_folder,SeqPaths.aerts_57k_cells_raw_folder,1);
 			System.out.println("Chunks: "+ chuncks );
 
 			System.out.println("Finish prepare aerts 57k cells raw ");
 //			System.exit(0);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private static void getExpressedCellsInGenes() {
+		try {
+			System.out.println("Start get expressed cells ");
+			Aerts_57k_cells.getExpressedCells(SeqPaths.aerts_57k_cells_raw,SeqPaths.aerts_57k_cells_result);
+			System.out.println("Finish get expressed cells ");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
