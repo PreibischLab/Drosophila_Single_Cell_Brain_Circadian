@@ -11,7 +11,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 public class IOSeq {
-	public static void saveJson(aerts_57k_cells data, String path) {
+	public static void saveJson(Aerts_57k_cells data, String path) {
 		try(Writer writer = new OutputStreamWriter(new FileOutputStream(path) , "UTF-8")){
             Gson gson = new GsonBuilder().create();
             gson.toJson(data, writer);
