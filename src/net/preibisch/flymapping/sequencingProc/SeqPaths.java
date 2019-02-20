@@ -20,4 +20,6 @@ public class SeqPaths {
 
 	public static final String dros_lines_expr_values_2083_genes_top3 = "/Users/Marwan/Desktop/FlyBrainMappingProject/single_cell_sequencing_data/dros_lines_expr_values_2083_genes_top3.json";
 	
+	public static final String dros_linesIDtoJaneliaID = "/Users/Marwan/Desktop/FlyBrainMappingProject/single_cell_sequencing_data/dros_linesIDtoJaneliaID.txt";
+	
 }

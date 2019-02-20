@@ -6,10 +6,12 @@ import java.nio.file.Paths;
 
 public class SerializeDataMain {
 	public static void main(String[] args) throws IOException {
-//		prepare_aerts_57k_cells_raw();
+		prepare_aerts_57k_cells_raw();
 		
 //		prepare_dros_lines();
-		getTop3DrosLines();
+//		getTop3DrosLines();
+		
+		
 
 //		Path aerts_57k_cells_raw_path = Paths.get(SeqPaths.aerts_57k_cells_test_json);
 //		TxtProcess.infos(aerts_57k_cells_raw_path);
@@ -21,10 +23,15 @@ public class SerializeDataMain {
 	}
 
 	private static void getTop3DrosLines() throws IOException {
+		
 		System.out.println("Start get Top3");
 		int n=3;
 		Path dros_lines_expr_values_2083_genes_raw_path = Paths.get(SeqPaths.SEQUENCING_FOLDER,SeqPaths.dros_lines_expr_values_2083_genes);
-		Dros_lines.getTopNFile(n, dros_lines_expr_values_2083_genes_raw_path, SeqPaths.dros_lines_expr_values_2083_genes_top3);
+		Path iDGenespath = Paths.get(SeqPaths.dros_linesIDtoJaneliaID);
+		System.out.println("Get infos..");
+		TxtProcess.infos(dros_lines_expr_values_2083_genes_raw_path);
+		TxtProcess.infos(iDGenespath);
+		Dros_lines.getTopNFile(n, dros_lines_expr_values_2083_genes_raw_path, iDGenespath,SeqPaths.dros_lines_expr_values_2083_genes_top3);
 		System.out.println("Finish get Top3");
 	}
 
@@ -32,8 +39,8 @@ public class SerializeDataMain {
 		try {
 			System.out.println("Start prepare aerts 57k cells raw ");
 			Path aerts_57k_cells_raw_path = Paths.get(SeqPaths.SEQUENCING_FOLDER,SeqPaths.aerts_57k_cells_raw);
-			Path aerts_57k_cells_raw_output_folder = Paths.get(SeqPaths.SEQUENCING_FOLDER,SeqPaths.aerts_57k_cells_raw_folder);
-			int chuncks = Aerts_57k_cells.toChuncks(aerts_57k_cells_raw_path,aerts_57k_cells_raw_output_folder,SeqPaths.aerts_57k_cells_raw_folder,200);
+			String aerts_57k_cells_raw_output_folder = Paths.get(SeqPaths.SEQUENCING_FOLDER,SeqPaths.aerts_57k_cells_raw_folder).toString();
+			int chuncks = Aerts_57k_cells.toChuncks(aerts_57k_cells_raw_path,aerts_57k_cells_raw_output_folder,SeqPaths.aerts_57k_cells_raw_folder,100);
 			System.out.println("Chunks: "+ chuncks );
 
 			System.out.println("Finish prepare aerts 57k cells raw ");

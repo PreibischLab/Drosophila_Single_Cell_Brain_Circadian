@@ -5,7 +5,6 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -79,7 +78,7 @@ public class Dros_lines {
 			String line = sc.nextLine();
 			List<Float> elm = new LinkedList<String>(Arrays.asList(line.split("	"))).stream().map(Float::parseFloat)
 					.collect(Collectors.toList());
-		
+
 			elements.put(index, elm);
 			i++;
 			index++;
@@ -90,29 +89,31 @@ public class Dros_lines {
 		save(chunk, out, elements);
 		return n_chunk;
 	}
-	
-	public static void getTopNFile(int n, Path input,String output_file) throws IOException {
+
+	public static void getTopNFile(int n, Path input, Path iDGenespath, String output_file) throws IOException {
 		int index = 0;
 		
+		List<String> ids = Arrays.asList(new Scanner(iDGenespath, "UTF-8").nextLine().split("	"));
 		Scanner sc = new Scanner(input, "UTF-8");
-		HashMap<Integer, Map<Integer, Float>> elements = new HashMap<Integer, Map<Integer, Float>>();
+		HashMap<HashMap<Integer, String>, Map<Integer, Float>> elements = new HashMap<HashMap<Integer, String>, Map<Integer, Float>>();
 
-	
 		while (sc.hasNextLine()) {
-			List<Float> elm = new LinkedList<String>(Arrays.asList(sc.nextLine().split("	"))).stream().map(Float::parseFloat)
-					.collect(Collectors.toList());
-	
-			Map<Integer, Float> top = getTopN(n, elm); 
-			elements.put(index, top);
+			List<Float> elm = new LinkedList<String>(Arrays.asList(sc.nextLine().split("	"))).stream()
+					.map(Float::parseFloat).collect(Collectors.toList());
+
+			Map<Integer, Float> top = getTopN(n, elm);
+			
+			HashMap<Integer, String> geneInfo = new HashMap<>();
+			geneInfo.put(index, ids.get(index));
+			
+			elements.put(geneInfo, top);
 
 			index++;
 		}
+		System.out.println("index: " + index);
 
 		save(output_file, elements);
 	}
-
-
-	
 
 	private static Map<Integer, Float> getTopN(int n, List<Float> list) {
 		int[] topIndexes = new int[n];
@@ -132,8 +133,8 @@ public class Dros_lines {
 		}
 
 		Map<Integer, Float> map = new LinkedHashMap<Integer, Float>();
-		
-		for(int i =0; i<n ; i++){
+
+		for (int i = 0; i < n; i++) {
 			map.put(topIndexes[i], topVal[i]);
 		}
 		return map;
@@ -147,32 +148,36 @@ public class Dros_lines {
 		return pos;
 	}
 
-	 public static <K, V> void printMap(Map<K, V> map) {
-	        for (Map.Entry<K, V> entry : map.entrySet()) {
-	            System.out.println("Key : " + entry.getKey() 
-					+ " Value : " + entry.getValue());
-	        }
-	    }
+	public static <K, V> void printMap(Map<K, V> map) {
+		for (Map.Entry<K, V> entry : map.entrySet()) {
+			System.out.println("Key : " + entry.getKey() + " Value : " + entry.getValue());
+		}
+	}
+
 	private static void save(int chunk, Path path, HashMap<Integer, List<Float>> elements)
-			throws UnsupportedEncodingException, FileNotFoundException {
+			throws IOException {
 
 		Writer writer = new OutputStreamWriter(new FileOutputStream(path.toString()), "UTF-8");
 		Dros_lines dros_lines = new Dros_lines(elements, chunk);
 		Gson gson = new GsonBuilder().create();
 		gson.toJson(dros_lines, writer);
+		writer.flush();
+		writer.close();
 	}
-	
-	private static void save(String path, HashMap<Integer, Map<Integer, Float>> elements) throws UnsupportedEncodingException, FileNotFoundException {
+
+	private static void save(String path, HashMap<HashMap<Integer, String>, Map<Integer, Float>> elements) throws IOException {
 		Writer writer = new OutputStreamWriter(new FileOutputStream(path), "UTF-8");
 		Gson gson = new GsonBuilder().create();
 		gson.toJson(elements, writer);
+		writer.flush();
+		writer.close();
 	}
 
 	public static void main(String[] args) {
 		// Test get top N
 		int n = 3;
 
-		List<Float> array = Arrays.asList(3f,  3f, 8f, 100f,9f, 0.1f, 85f);
+		List<Float> array = Arrays.asList(3f, 3f, 8f, 100f, 9f, 0.1f, 85f);
 		Map<Integer, Float> top = getTopN(n, array);
 
 		printMap(top);
