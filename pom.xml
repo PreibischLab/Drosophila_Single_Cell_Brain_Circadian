@@ -44,6 +44,11 @@
       <artifactId>progressbar</artifactId>
       <version>0.7.2</version>
   </dependency>
+  	<dependency>
+			<groupId>info.picocli</groupId>
+			<artifactId>picocli</artifactId>
+			<version>3.9.2</version>
+		</dependency>
 	</dependencies>
 
 	<repositories>
