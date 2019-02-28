@@ -1,8 +1,7 @@
 package net.preibisch.flymapping.sequencingProc;
 
+import java.io.File;
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 public class SerializeDataMain {
 	public static void main(String[] args) throws IOException {
@@ -26,21 +25,22 @@ public class SerializeDataMain {
 		
 		System.out.println("Start get Top3");
 		int n=3;
-		Path dros_lines_expr_values_2083_genes_raw_path = Paths.get(SeqPaths.SEQUENCING_FOLDER,SeqPaths.dros_lines_expr_values_2083_genes);
-		Path iDGenespath = Paths.get(SeqPaths.dros_linesIDtoJaneliaID);
+		File dros_lines_expr_values_2083_genes_raw_path = MyPaths.File(MyPaths.dros_lines_expr_values_2083_genes);
+		File iDGenespath = MyPaths.File(MyPaths.dros_linesIDtoJaneliaID);
 		System.out.println("Get infos..");
 		TxtProcess.infos(dros_lines_expr_values_2083_genes_raw_path);
 		TxtProcess.infos(iDGenespath);
-		Dros_lines.getTopNFile(n, dros_lines_expr_values_2083_genes_raw_path, iDGenespath,SeqPaths.dros_lines_expr_values_2083_genes_top3);
+		File resultFile = MyPaths.ResultFile(MyPaths.dros_lines_expr_values_2083_genes_top);
+		Dros_lines.getTopNFile(n, dros_lines_expr_values_2083_genes_raw_path, iDGenespath,resultFile);
 		System.out.println("Finish get Top3");
 	}
 
 	private static void prepare_aerts_57k_cells_raw() {
 		try {
 			System.out.println("Start prepare aerts 57k cells raw ");
-			Path aerts_57k_cells_raw_path = Paths.get(SeqPaths.SEQUENCING_FOLDER,SeqPaths.aerts_57k_cells_raw);
-			String aerts_57k_cells_raw_output_folder = Paths.get(SeqPaths.SEQUENCING_FOLDER,SeqPaths.aerts_57k_cells_raw_folder).toString();
-			int chuncks = Aerts_57k_cells.toChuncks(aerts_57k_cells_raw_path,aerts_57k_cells_raw_output_folder,SeqPaths.aerts_57k_cells_raw_folder,1);
+			File aerts_57k_cells_raw_path = MyPaths.File(MyPaths.aerts_57k_cells_raw);
+			File aerts_57k_cells_raw_output_folder = MyPaths.ResultFolder(MyPaths.aerts_57k_cells_raw_folder);
+			int chuncks = Aerts_57k_cells.toChuncks(aerts_57k_cells_raw_path,aerts_57k_cells_raw_output_folder,MyPaths.aerts_57k_cells_raw_folder,1);
 			System.out.println("Chunks: "+ chuncks );
 
 			System.out.println("Finish prepare aerts 57k cells raw ");
@@ -53,7 +53,7 @@ public class SerializeDataMain {
 	private static void getExpressedCellsInGenes() {
 		try {
 			System.out.println("Start get expressed cells ");
-			Aerts_57k_cells.getExpressedCells(SeqPaths.aerts_57k_cells_raw,SeqPaths.aerts_57k_cells_result);
+			Aerts_57k_cells.getExpressedCells(MyPaths.File(MyPaths.aerts_57k_cells_raw),MyPaths.ResultFile( MyPaths.aerts_57k_cells_result));
 			System.out.println("Finish get expressed cells ");
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -64,9 +64,11 @@ public class SerializeDataMain {
 		try {
 
 			System.out.println("Start prepare Dros Lines ");
-			Path dros_lines_expr_values_2083_genes_raw_path = Paths.get(SeqPaths.SEQUENCING_FOLDER,SeqPaths.dros_lines_expr_values_2083_genes);
-			Path dros_lines_expr_values_2083_genes_output_folder = Paths.get(SeqPaths.SEQUENCING_FOLDER,SeqPaths.dros_lines_expr_values_2083_genes_folder);
-			int chuncks = Dros_lines.toChuncks(dros_lines_expr_values_2083_genes_raw_path,dros_lines_expr_values_2083_genes_output_folder,SeqPaths.dros_lines_expr_values_2083_genes_folder,200);
+			File dros_lines_expr_values_2083_genes_raw_path = MyPaths.File(MyPaths.dros_lines_expr_values_2083_genes);
+
+			File dros_lines_expr_values_2083_genes_output_folder = MyPaths.ResultFolder(MyPaths.dros_lines_expr_values_2083_genes_folder);
+			
+			int chuncks = Dros_lines.toChuncks(dros_lines_expr_values_2083_genes_raw_path,dros_lines_expr_values_2083_genes_output_folder,MyPaths.dros_lines_expr_values_2083_genes_folder,200);
 			System.out.println("Chunks: "+ chuncks );
 
 			System.out.println("Finish prepare Dros Lines ");

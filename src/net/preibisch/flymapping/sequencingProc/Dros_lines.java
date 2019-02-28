@@ -1,5 +1,6 @@
 package net.preibisch.flymapping.sequencingProc;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
@@ -47,7 +48,7 @@ public class Dros_lines {
 		return "Size: " + elments.size() + "List: " + elments.values().iterator().next().size();
 	}
 
-	public static int toChuncks(Path input, Path output_folder, String output_name, int chunk) throws IOException {
+	public static int toChuncks(File input, File output_folder, String output_name, int chunk) throws IOException {
 		int index = 0, i = 0, n_chunk = 0;
 
 		long col = TxtProcess.columns(input);
@@ -90,7 +91,7 @@ public class Dros_lines {
 		return n_chunk;
 	}
 
-	public static void getTopNFile(int n, Path input, Path iDGenespath, String output_file) throws IOException {
+	public static void getTopNFile(int n, File input, File iDGenespath, File output_file) throws IOException {
 		int index = 0;
 		
 		List<String> ids = Arrays.asList(new Scanner(iDGenespath, "UTF-8").nextLine().split("	"));
@@ -165,7 +166,7 @@ public class Dros_lines {
 		writer.close();
 	}
 
-	private static void save(String path, HashMap<HashMap<Integer, String>, Map<Integer, Float>> elements) throws IOException {
+	private static void save(File path, HashMap<HashMap<Integer, String>, Map<Integer, Float>> elements) throws IOException {
 		Writer writer = new OutputStreamWriter(new FileOutputStream(path), "UTF-8");
 		Gson gson = new GsonBuilder().create();
 		gson.toJson(elements, writer);
