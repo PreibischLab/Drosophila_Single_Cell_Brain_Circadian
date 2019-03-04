@@ -14,7 +14,6 @@ public class Prepare_aerts_57k_cells_raw implements Callable<Void> {
 		CommandLine.call(new Prepare_aerts_57k_cells_raw(), args);
 	}
 
-	@Override
 	public Void call() throws IOException {
 
 		System.out.println("Start prepare aerts 57k cells raw ");

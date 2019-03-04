@@ -24,7 +24,8 @@ public class TopDrosLines implements Callable<Void>{
 	
 	@Override
 	public Void call() throws IOException{
-		if(n!=null) {
+		if(n==null) { n = 5;}
+		
 		System.out.println("Start get Top "+n);
 		File dros_lines_expr_values_2083_genes_raw_path = MyPaths.File(MyPaths.dros_lines_expr_values_2083_genes);
 		File iDGenespath = MyPaths.File(MyPaths.dros_linesIDtoJaneliaID);
@@ -34,12 +35,7 @@ public class TopDrosLines implements Callable<Void>{
 		File resultFile = MyPaths.ResultFile(MyPaths.dros_lines_expr_values_2083_genes_top);
 		Dros_lines.getTopNFile(n, dros_lines_expr_values_2083_genes_raw_path, iDGenespath, resultFile);
 		System.out.println("Finish get Top "+n);
-		}
-		else if(x!=0.0) {
-			System.out.println("Not yet implimented");
-		}else {
-			throw new IllegalArgumentException("Give top N or threshold");
-		}
+		
 		return null;
 	}
 }

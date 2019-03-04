@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Random;
 
-import org.apache.commons.io.FileUtils;
+import org.scijava.util.FileUtils;
 
 import ij.ImagePlus;
 import ij.VirtualStack;
@@ -46,10 +46,7 @@ public class IOFunctions {
 		ImagePlus imp = null;
 
 		if (img instanceof ImagePlusImg)
-			try {
-				imp = ((ImagePlusImg<T, ?>) img).getImagePlus();
-			} catch (ImgLibException e) {
-			}
+			imp = ((ImagePlusImg<T, ?>) img).getImagePlus();
 
 		if (imp == null) {
 			if (virtualDisplay)
@@ -121,7 +118,7 @@ public class IOFunctions {
 	 * the entire virtual stack once to collect some slice labels, which takes
 	 * forever in this case.
 	 */
-	public static boolean saveTiffStack(final ImagePlus imp, final String path, MyCallBack callback) {
+	public static boolean saveTiffStack(final ImagePlus imp, final String path, MyCallBack callback) throws IOException {
 		FileInfo fi = imp.getFileInfo();
 		boolean virtualStack = imp.getStack().isVirtual();
 		if (virtualStack)
@@ -139,10 +136,7 @@ public class IOFunctions {
 			return false;
 		} finally {
 			if (out != null)
-				try {
-					out.close();
-				} catch (IOException e) {
-				}
+				out.close();
 		}
 		return true;
 	}
@@ -212,13 +206,4 @@ public class IOFunctions {
 		return img;
 	}
 
-	public static void cleanFolder(String folderName) {
-		File file = new File(folderName);
-		file.mkdir();
-		try {
-			FileUtils.cleanDirectory(file);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
 }
