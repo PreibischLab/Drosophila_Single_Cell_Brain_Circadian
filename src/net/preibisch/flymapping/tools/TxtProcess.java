@@ -1,4 +1,4 @@
-package net.preibisch.flymapping.sequencingProc;
+package net.preibisch.flymapping.tools;
 
 import java.io.File;
 import java.io.IOException;

@@ -1,4 +1,4 @@
-package net.preibisch.flymapping.sequencingProc;
+package net.preibisch.flymapping.seq.droslines;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -9,6 +9,7 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -23,6 +24,8 @@ import java.util.stream.Collectors;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonReader;
+
+import net.preibisch.flymapping.tools.TxtProcess;
 
 public class Dros_lines {
 	int chunk;
@@ -91,9 +94,10 @@ public class Dros_lines {
 		return n_chunk;
 	}
 
-	public static void getTopNFile(int n, File input, File iDGenespath, File output_file) throws IOException {
+	public static HashMap<HashMap<Integer, String>, Map<Integer, Float>> getTopNFile(int n, File input,
+			File iDGenespath) throws IOException {
 		int index = 0;
-		
+
 		List<String> ids = Arrays.asList(new Scanner(iDGenespath, "UTF-8").nextLine().split("	"));
 		Scanner sc = new Scanner(input, "UTF-8");
 		HashMap<HashMap<Integer, String>, Map<Integer, Float>> elements = new HashMap<HashMap<Integer, String>, Map<Integer, Float>>();
@@ -103,17 +107,102 @@ public class Dros_lines {
 					.map(Float::parseFloat).collect(Collectors.toList());
 
 			Map<Integer, Float> top = getTopN(n, elm);
-			
+
 			HashMap<Integer, String> geneInfo = new HashMap<>();
 			geneInfo.put(index, ids.get(index));
-			
+
 			elements.put(geneInfo, top);
 
 			index++;
 		}
 		System.out.println("index: " + index);
 
-		save(output_file, elements);
+		return elements;
+	}
+
+	public static HashMap<String, Map<Integer, Float>> getExpressedMoreThan(double prob, File input, File iDGenespath,
+			Map<String, String> janilaMapIdGenes) throws IOException {
+		int index = 0;
+
+		List<String> ids = Arrays.asList(new Scanner(iDGenespath, "UTF-8").nextLine().split("	"));
+		System.out.println("Ids size = " + ids.size());
+
+		Scanner sc = new Scanner(input, "UTF-8");
+		HashMap<String, Map<Integer, Float>> elements = new HashMap<String, Map<Integer, Float>>();
+		List<String> notFound = new ArrayList<>();
+		while (sc.hasNextLine()) {
+			List<Float> elm = new LinkedList<String>(Arrays.asList(sc.nextLine().split("	"))).stream()
+					.map(Float::parseFloat).collect(Collectors.toList());
+
+			Map<Integer, Float> top = getMorethan(elm, prob);
+
+//			HashMap<Integer, String> geneInfo = new HashMap<>();
+//			geneInfo.put(index, getJanilaName(ids.get(index)));
+
+			String janilaId = getJanilaName(ids.get(index));
+			if (janilaMapIdGenes.containsKey(janilaId)) {
+				String geneName = janilaMapIdGenes.get(janilaId);
+
+				if (elements.containsKey(geneName)) {
+//					System.out.println(index + "-" + geneName + " found before");
+					top.putAll(elements.get(geneName));
+				}
+				elements.put(geneName, top);
+			} else {
+				notFound.add(janilaId);
+			}
+
+			index++;
+		}
+		System.out.println("index: " + index);
+		System.out.println("NOT FOUND: "+String.join(" - ", notFound));
+
+		return elements;
+	}
+	
+	public static List<String> getExpressedGenes(File iDGenespath,
+			Map<String, String> janilaMapIdGenes) throws IOException {
+		
+		List<String> expressedGenes = new ArrayList<>();
+		List<String> ids = Arrays.asList(new Scanner(iDGenespath, "UTF-8").nextLine().split("	"));
+		System.out.println("Ids size = " + ids.size());
+		List<String> notFound = new ArrayList<>();
+		for(String id : ids){
+			String janilaId = getJanilaName(id);
+			if (janilaMapIdGenes.containsKey(janilaId)) {
+				String geneName = janilaMapIdGenes.get(janilaId);	
+				if(!expressedGenes.contains(geneName)) expressedGenes.add(geneName);	
+			} else {
+				notFound.add(janilaId);
+			}
+		}
+		System.out.println("NOT FOUND: "+String.join(" - ", notFound));
+
+		return expressedGenes;
+	}
+
+	private static String getJanilaName(String input) {
+		String[] parts = input.split("_");
+		String name = input;
+		try {
+			name = parts[0] + parts[1];
+		} catch (Exception e) {
+			System.out.println("Error convert name: " + input);
+		}
+		name = name.replace("'", "");
+		return name;
+	}
+
+	private static Map<Integer, Float> getMorethan(List<Float> list, double prob) {
+		Map<Integer, Float> map = new LinkedHashMap<Integer, Float>();
+
+		for (int i = 0; i < list.size(); i++) {
+			if (prob < list.get(i)) {
+				map.put(i, list.get(i));
+			}
+		}
+		return map;
+
 	}
 
 	private static Map<Integer, Float> getTopN(int n, List<Float> list) {
@@ -155,21 +244,12 @@ public class Dros_lines {
 		}
 	}
 
-	private static void save(int chunk, Path path, HashMap<Integer, List<Float>> elements)
-			throws IOException {
+	private static void save(int chunk, Path path, HashMap<Integer, List<Float>> elements) throws IOException {
 
 		Writer writer = new OutputStreamWriter(new FileOutputStream(path.toString()), "UTF-8");
 		Dros_lines dros_lines = new Dros_lines(elements, chunk);
 		Gson gson = new GsonBuilder().create();
 		gson.toJson(dros_lines, writer);
-		writer.flush();
-		writer.close();
-	}
-
-	private static void save(File path, HashMap<HashMap<Integer, String>, Map<Integer, Float>> elements) throws IOException {
-		Writer writer = new OutputStreamWriter(new FileOutputStream(path), "UTF-8");
-		Gson gson = new GsonBuilder().create();
-		gson.toJson(elements, writer);
 		writer.flush();
 		writer.close();
 	}

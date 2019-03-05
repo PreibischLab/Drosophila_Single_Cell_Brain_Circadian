@@ -1,4 +1,4 @@
-package net.preibisch.flymapping.sequencingProc;
+package net.preibisch.flymapping.seq.aerts;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -20,6 +20,9 @@ import java.util.stream.Collectors;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonReader;
+
+import net.preibisch.flymapping.config.PathUtils;
+import net.preibisch.flymapping.tools.TxtProcess;
 
 public class Aerts_57k_cells {
 	int chunk;
@@ -63,14 +66,14 @@ public class Aerts_57k_cells {
 		HashMap<String, List<String>> elements = new HashMap<String, List<String>>();
 
 		String outName = "head_" + output_name + ".json";
-		File outFile = MyPaths.Result(output_folder, outName);
+		File outFile = PathUtils.Result(output_folder, outName);
 
 		createHeadFile(outFile, sc.nextLine());
 
 		while (sc.hasNextLine()) {
 			if (i >= chunk) {
 				outName = n_chunk + "_" + output_name + ".json";
-				outFile = MyPaths.Result(output_folder, outName);
+				outFile = PathUtils.Result(output_folder, outName);
 				save(chunk, outFile, elements);
 
 				System.out.println(n_chunk + "/" + totalChunks + " | " + outFile);
@@ -89,11 +92,11 @@ public class Aerts_57k_cells {
 		}
 
 		outName = "rows_" + output_name + ".json";
-		outFile = MyPaths.Result(output_folder, outName);
+		outFile = PathUtils.Result(output_folder, outName);
 		save(outFile, linesNames);
 
 		outName = n_chunk + "_" + output_name + ".json";
-		outFile = MyPaths.Result(output_folder, outName);
+		outFile = PathUtils.Result(output_folder, outName);
 		save(chunk, outFile, elements);
 		return n_chunk;
 	}
@@ -125,7 +128,7 @@ public class Aerts_57k_cells {
 		writer.close();
 	}
 
-	public static void getExpressedCells(File input, File output) throws IOException {
+	public static HashMap<String, HashMap<HashMap<Integer, String>, Integer>> getExpressedCells(File input) throws IOException {
 		int i = 0;
 		long col = TxtProcess.columns(input);
 		long lines = TxtProcess.lines(input);
@@ -149,11 +152,9 @@ public class Aerts_57k_cells {
 			System.out.println(i + " -" + "Got Expressed Cells");
 			elements.put(index, expressedCells);
 			i++;
-			if (i == 30)
-				break;
 		}
 
-		save(output, elements);
+		return elements;
 
 	}
 
@@ -171,6 +172,28 @@ public class Aerts_57k_cells {
 			}
 		}
 		return result;
+	}
+	
+	public static List<String> getCellsNames(File input) throws FileNotFoundException {
+		Scanner sc = new Scanner(input, "UTF-8");
+		List<String> cellsNames = new LinkedList<String>(Arrays.asList(sc.nextLine().replace("\"", "").split("	")));
+		return cellsNames;
+	}
+
+	public static List<String> getGenesNames(File input) throws FileNotFoundException {
+		
+		Scanner sc = new Scanner(input, "UTF-8");
+
+		List<String> elements = new ArrayList<>();
+
+		while (sc.hasNextLine()) {
+			String line = sc.nextLine();
+			LinkedList<String> elm = new LinkedList<String>(Arrays.asList(line.split("	")));
+			String index = elm.get(0).replace("\"", "");
+			elements.add(index);
+		}
+
+		return elements;
 	}
 
 }

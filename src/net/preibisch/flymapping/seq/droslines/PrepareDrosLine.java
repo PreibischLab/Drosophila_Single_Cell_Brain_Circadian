@@ -1,11 +1,11 @@
-package net.preibisch.flymapping.headless;
+package net.preibisch.flymapping.seq.droslines;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.Callable;
 
-import net.preibisch.flymapping.sequencingProc.Dros_lines;
-import net.preibisch.flymapping.sequencingProc.MyPaths;
+import net.preibisch.flymapping.config.MyPaths;
+import net.preibisch.flymapping.config.PathUtils;
 import picocli.CommandLine;
 
 public class PrepareDrosLine implements Callable<Void> {
@@ -16,9 +16,9 @@ public class PrepareDrosLine implements Callable<Void> {
 
 	public Void call() throws IOException {
 		System.out.println("Start prepare Dros Lines ");
-		File dros_lines_expr_values_2083_genes_raw_path = MyPaths.File(MyPaths.dros_lines_expr_values_2083_genes);
+		File dros_lines_expr_values_2083_genes_raw_path = PathUtils.File(MyPaths.dros_lines_expr_values_2083_genes);
 
-		File dros_lines_expr_values_2083_genes_output_folder = MyPaths
+		File dros_lines_expr_values_2083_genes_output_folder = PathUtils
 				.ResultFolder(MyPaths.dros_lines_expr_values_2083_genes_folder);
 
 		int chuncks = Dros_lines.toChuncks(dros_lines_expr_values_2083_genes_raw_path,

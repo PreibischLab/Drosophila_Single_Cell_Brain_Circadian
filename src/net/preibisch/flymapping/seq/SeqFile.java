@@ -1,4 +1,4 @@
-package net.preibisch.flymapping.sequencingProc;
+package net.preibisch.flymapping.seq;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;

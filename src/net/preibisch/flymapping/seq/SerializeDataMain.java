@@ -1,4 +1,4 @@
-package net.preibisch.flymapping.sequencingProc;
+package net.preibisch.flymapping.seq;
 
 import java.io.IOException;
 import java.util.concurrent.Callable;
