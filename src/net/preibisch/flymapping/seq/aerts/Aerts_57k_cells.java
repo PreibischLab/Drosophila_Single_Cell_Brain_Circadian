@@ -9,6 +9,7 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -158,6 +159,90 @@ public class Aerts_57k_cells {
 
 	}
 
+	public static HashMap<String, HashMap<HashMap<Integer, String>, Double>> getNormalisedExpressedCells(File input)
+			throws IOException {
+		int i = 0;
+		long col = TxtProcess.columns(input);
+		long lines = TxtProcess.lines(input);
+
+		TxtProcess.infos(input.toString(), col, lines);
+
+		Integer max = getMaxExpressed(input);
+
+		System.out.println("Max val: " + max);
+
+		Scanner sc = new Scanner(input, "UTF-8");
+
+		List<String> cellsNames = new LinkedList<String>(Arrays.asList(sc.nextLine().replace("\"", "").split("	")));
+
+		HashMap<String, HashMap<HashMap<Integer, String>, Double>> elements = new HashMap<>();
+
+		while (sc.hasNextLine()) {
+			String line = sc.nextLine();
+			LinkedList<String> elm = new LinkedList<String>(Arrays.asList(line.split("	")));
+			String index = elm.get(0).replace("\"", "");
+
+			elm.remove(0);
+			System.out.println(i + " -" + "Looking for Expressed Cells");
+			HashMap<HashMap<Integer, String>, Double> expressedCells = getExpressedCellsInGeneNormalised(elm,
+					cellsNames, max);
+			System.out.println(i + " -" + "Got Expressed Cells");
+			elements.put(index, expressedCells);
+			i++;
+
+		}
+
+		return elements;
+
+	}
+
+	private static HashMap<HashMap<Integer, String>, Double> getExpressedCellsInGeneNormalised(LinkedList<String> elm,
+			List<String> cellsNames, Integer max) {
+		HashMap<HashMap<Integer, String>, Double> result = new HashMap<>();
+
+//		List<Integer> vals = elm.stream().map(Integer::parseInt).collect(Collectors.toList());
+
+		List<Double> vals = elm.stream().mapToDouble(Double::parseDouble).mapToObj(x -> x / (max * 1.0f))
+				.collect(Collectors.toList());
+
+			for (int i = 0; i < vals.size(); i++) {
+				if (vals.get(i) > 0) {
+					String cellName = cellsNames.get(i);
+					HashMap<Integer, String> cellInfo = new HashMap<>();
+					cellInfo.put(i, cellName);
+					result.put(cellInfo, vals.get(i));
+				}
+			}
+			return result;
+	}
+
+	public static Integer getMaxExpressed(File input) throws IOException {
+		Scanner sc = new Scanner(input, "UTF-8");
+		sc.nextLine();
+		Integer max = 0;
+		int i = 0;
+		while (sc.hasNextLine()) {
+			String line = sc.nextLine();
+			LinkedList<String> elm = new LinkedList<String>(Arrays.asList(line.split("	")));
+			elm.removeFirst();
+			Integer tmp = getMax(elm);
+			if (tmp > max) {
+				max = tmp;
+				System.out.println("" + i + " - " + max);
+			}
+			i++;
+		}
+		System.out.println("Finished : " + i);
+		return max;
+
+	}
+
+	private static Integer getMax(LinkedList<String> list) {
+		List<Integer> vals = list.stream().map(Integer::parseInt).collect(Collectors.toList());
+		Integer max = Collections.max(vals);
+		return max;
+	}
+
 	private static HashMap<HashMap<Integer, String>, Integer> getExpressedCellsInGene(LinkedList<String> elm,
 			List<String> cellsNames) {
 		HashMap<HashMap<Integer, String>, Integer> result = new HashMap<>();
@@ -194,6 +279,47 @@ public class Aerts_57k_cells {
 		}
 
 		return elements;
+	}
+
+	public static HashMap<String, HashMap<HashMap<Integer, String>, Double>> getNormalisedExpressedCellsInFoundGenes(
+			File input, List<String> genes) throws IOException {
+
+		int i = 0;
+		long col = TxtProcess.columns(input);
+		long lines = TxtProcess.lines(input);
+
+		TxtProcess.infos(input.toString(), col, lines);
+
+		Integer max = getMaxExpressed(input);
+
+		System.out.println("Max val: " + max);
+
+		Scanner sc = new Scanner(input, "UTF-8");
+
+		List<String> cellsNames = new LinkedList<String>(Arrays.asList(sc.nextLine().replace("\"", "").split("	")));
+
+		HashMap<String, HashMap<HashMap<Integer, String>, Double>> elements = new HashMap<>();
+
+		while (sc.hasNextLine()) {
+			String line = sc.nextLine();
+			LinkedList<String> elm = new LinkedList<String>(Arrays.asList(line.split("	")));
+			String index = elm.get(0).replace("\"", "");
+
+			if (genes.contains(index)) {
+				elm.remove(0);
+				System.out.println(i + " -" + "Looking for Expressed Cells");
+				HashMap<HashMap<Integer, String>, Double> expressedCells = getExpressedCellsInGeneNormalised(elm,
+						cellsNames, max);
+				System.out.println(i + " -" + "Got Expressed Cells");
+				elements.put(index, expressedCells);
+			}
+
+			i++;
+
+		}
+
+		return elements;
+
 	}
 
 }

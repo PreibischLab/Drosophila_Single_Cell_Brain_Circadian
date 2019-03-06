@@ -22,6 +22,10 @@ public class MyPaths {
 	
 	public static final String aerts_57k_cells_result = "aerts_57k_cells_expressed_only.json";
 
+	public static final String aerts_57k_cells_normalised = "aerts_57k_cells_expressed_only_normalised.json";
+
+	public static final String aerts_57k_cells_normalised_foundGenes = "aerts_57k_cells_normalised_foundGenes.json";
+
 	public static final String aerts_57k_genes_names = "aerts_57k_genes_names_only.json";
 
 	public static final String concat_genes = "concat_genes.json";

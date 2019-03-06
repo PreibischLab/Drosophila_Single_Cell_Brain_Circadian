@@ -1,17 +1,18 @@
 package net.preibisch.flymapping.tools;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
-import java.util.HashMap;
-import java.util.Map;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.stream.JsonReader;
 
-public class GsonIO {
+public class GsonIO<T> {
 
 	public static void save(File path, Object obj) throws IOException {
 		Writer writer = new OutputStreamWriter(new FileOutputStream(path), "UTF-8");
@@ -20,5 +21,12 @@ public class GsonIO {
 		writer.flush();
 		writer.close();
 		System.out.println("File saved: " + path.getAbsolutePath() );
+	}
+
+	public static <T extends Object> T read(File path, Class<T> type) throws FileNotFoundException {
+		Gson gson = new Gson();
+		JsonReader reader = new JsonReader(new FileReader(path));
+		T data = gson.fromJson(reader, type);
+		return data;
 	}
 }
