@@ -22,7 +22,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonReader;
 
-import net.preibisch.flymapping.config.PathUtils;
+import net.preibisch.flymapping.tools.PathsUtils;
 import net.preibisch.flymapping.tools.TxtProcess;
 
 public class Aerts_57k_cells {
@@ -67,14 +67,14 @@ public class Aerts_57k_cells {
 		HashMap<String, List<String>> elements = new HashMap<String, List<String>>();
 
 		String outName = "head_" + output_name + ".json";
-		File outFile = PathUtils.Result(output_folder, outName);
+		File outFile = PathsUtils.Result(output_folder, outName);
 
 		createHeadFile(outFile, sc.nextLine());
 
 		while (sc.hasNextLine()) {
 			if (i >= chunk) {
 				outName = n_chunk + "_" + output_name + ".json";
-				outFile = PathUtils.Result(output_folder, outName);
+				outFile = PathsUtils.Result(output_folder, outName);
 				save(chunk, outFile, elements);
 
 				System.out.println(n_chunk + "/" + totalChunks + " | " + outFile);
@@ -93,11 +93,11 @@ public class Aerts_57k_cells {
 		}
 
 		outName = "rows_" + output_name + ".json";
-		outFile = PathUtils.Result(output_folder, outName);
+		outFile = PathsUtils.Result(output_folder, outName);
 		save(outFile, linesNames);
 
 		outName = n_chunk + "_" + output_name + ".json";
-		outFile = PathUtils.Result(output_folder, outName);
+		outFile = PathsUtils.Result(output_folder, outName);
 		save(chunk, outFile, elements);
 		return n_chunk;
 	}
@@ -119,8 +119,7 @@ public class Aerts_57k_cells {
 		writer.close();
 	}
 
-	private static void save(int chunk,  File file, HashMap<String, List<String>> elements)
-			throws IOException {
+	private static void save(int chunk, File file, HashMap<String, List<String>> elements) throws IOException {
 		Writer writer = new OutputStreamWriter(new FileOutputStream(file), "UTF-8");
 		Aerts_57k_cells aerts_57k_cells = new Aerts_57k_cells(elements, chunk);
 		Gson gson = new GsonBuilder().create();
@@ -129,7 +128,8 @@ public class Aerts_57k_cells {
 		writer.close();
 	}
 
-	public static HashMap<String, HashMap<HashMap<Integer, String>, Integer>> getExpressedCells(File input) throws IOException {
+	public static HashMap<String, HashMap<HashMap<Integer, String>, Integer>> getExpressedCells(File input)
+			throws IOException {
 		int i = 0;
 		long col = TxtProcess.columns(input);
 		long lines = TxtProcess.lines(input);
@@ -166,14 +166,13 @@ public class Aerts_57k_cells {
 		long lines = TxtProcess.lines(input);
 
 		TxtProcess.infos(input.toString(), col, lines);
-
-		Integer max = getMaxExpressed(input);
-
-		System.out.println("Max val: " + max);
-
 		Scanner sc = new Scanner(input, "UTF-8");
 
-		List<String> cellsNames = new LinkedList<String>(Arrays.asList(sc.nextLine().replace("\"", "").split("	")));
+		List<String> cellsNames = getCellsNamesFromLine(sc.nextLine());
+
+		Integer max = getMaxExpressed(input, cellsNames);
+
+		System.out.println("Max val: " + max);
 
 		HashMap<String, HashMap<HashMap<Integer, String>, Double>> elements = new HashMap<>();
 
@@ -196,6 +195,12 @@ public class Aerts_57k_cells {
 
 	}
 
+	private static List<String> getCellsNamesFromLine(String line) {
+		List<String> cellsNames = new LinkedList<String>(Arrays.asList(line.replace("\"", "").split("	")));
+		cellsNames.remove(0);
+		return cellsNames;
+	}
+
 	private static HashMap<HashMap<Integer, String>, Double> getExpressedCellsInGeneNormalised(LinkedList<String> elm,
 			List<String> cellsNames, Integer max) {
 		HashMap<HashMap<Integer, String>, Double> result = new HashMap<>();
@@ -205,18 +210,18 @@ public class Aerts_57k_cells {
 		List<Double> vals = elm.stream().mapToDouble(Double::parseDouble).mapToObj(x -> x / (max * 1.0f))
 				.collect(Collectors.toList());
 
-			for (int i = 0; i < vals.size(); i++) {
-				if (vals.get(i) > 0) {
-					String cellName = cellsNames.get(i);
-					HashMap<Integer, String> cellInfo = new HashMap<>();
-					cellInfo.put(i, cellName);
-					result.put(cellInfo, vals.get(i));
-				}
+		for (int i = 0; i < vals.size(); i++) {
+			if (vals.get(i) > 0) {
+				String cellName = cellsNames.get(i);
+				HashMap<Integer, String> cellInfo = new HashMap<>();
+				cellInfo.put(i, cellName);
+				result.put(cellInfo, vals.get(i));
 			}
-			return result;
+		}
+		return result;
 	}
 
-	public static Integer getMaxExpressed(File input) throws IOException {
+	public static Integer getMaxExpressed(File input, List<String> cellsNames) throws IOException {
 		Scanner sc = new Scanner(input, "UTF-8");
 		sc.nextLine();
 		Integer max = 0;
@@ -225,10 +230,14 @@ public class Aerts_57k_cells {
 			String line = sc.nextLine();
 			LinkedList<String> elm = new LinkedList<String>(Arrays.asList(line.split("	")));
 			elm.removeFirst();
-			Integer tmp = getMax(elm);
+			List<Integer> vals = elm.stream().map(Integer::parseInt).collect(Collectors.toList());
+			elm.clear();
+			Integer tmp = getMax(vals);
 			if (tmp > max) {
 				max = tmp;
-				System.out.println("" + i + " - " + max);
+				int index = vals.indexOf(tmp);
+				String cellname = cellsNames.get(index);
+				System.out.println("Line: " + i + " - Column: " + index + " - Cell: " + cellname + " - max: " + max);
 			}
 			i++;
 		}
@@ -237,8 +246,7 @@ public class Aerts_57k_cells {
 
 	}
 
-	private static Integer getMax(LinkedList<String> list) {
-		List<Integer> vals = list.stream().map(Integer::parseInt).collect(Collectors.toList());
+	private static Integer getMax(List<Integer> vals) {
 		Integer max = Collections.max(vals);
 		return max;
 	}
@@ -258,15 +266,16 @@ public class Aerts_57k_cells {
 		}
 		return result;
 	}
-	
+
 	public static List<String> getCellsNames(File input) throws FileNotFoundException {
 		Scanner sc = new Scanner(input, "UTF-8");
 		List<String> cellsNames = new LinkedList<String>(Arrays.asList(sc.nextLine().replace("\"", "").split("	")));
+		cellsNames.remove(0);
 		return cellsNames;
 	}
 
 	public static List<String> getGenesNames(File input) throws FileNotFoundException {
-		
+
 		Scanner sc = new Scanner(input, "UTF-8");
 
 		List<String> elements = new ArrayList<>();
@@ -290,13 +299,13 @@ public class Aerts_57k_cells {
 
 		TxtProcess.infos(input.toString(), col, lines);
 
-		Integer max = getMaxExpressed(input);
-
-		System.out.println("Max val: " + max);
-
 		Scanner sc = new Scanner(input, "UTF-8");
 
-		List<String> cellsNames = new LinkedList<String>(Arrays.asList(sc.nextLine().replace("\"", "").split("	")));
+		List<String> cellsNames = getCellsNamesFromLine(sc.nextLine());
+
+		Integer max = getMaxExpressed(input, cellsNames);
+
+		System.out.println("Max val: " + max);
 
 		HashMap<String, HashMap<HashMap<Integer, String>, Double>> elements = new HashMap<>();
 
@@ -307,10 +316,8 @@ public class Aerts_57k_cells {
 
 			if (genes.contains(index)) {
 				elm.remove(0);
-				System.out.println(i + " -" + "Looking for Expressed Cells");
 				HashMap<HashMap<Integer, String>, Double> expressedCells = getExpressedCellsInGeneNormalised(elm,
 						cellsNames, max);
-				System.out.println(i + " -" + "Got Expressed Cells");
 				elements.put(index, expressedCells);
 			}
 

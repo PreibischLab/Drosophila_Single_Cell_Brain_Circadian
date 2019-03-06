@@ -8,12 +8,14 @@ import java.util.Map;
 import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 
-import net.preibisch.flymapping.config.MyPaths;
-import net.preibisch.flymapping.config.PathUtils;
+import net.preibisch.flymapping.seq.ResultsPaths;
+import net.preibisch.flymapping.seq.aerts.AertsPaths;
 import net.preibisch.flymapping.seq.aerts.Aerts_57k_cells;
+import net.preibisch.flymapping.seq.droslines.DrosLinesPaths;
 import net.preibisch.flymapping.seq.droslines.Dros_lines;
 import net.preibisch.flymapping.seq.droslines.JaneliaIDtoGeneExcelReader;
 import net.preibisch.flymapping.tools.GsonIO;
+import net.preibisch.flymapping.tools.PathsUtils;
 import net.preibisch.flymapping.tools.TxtProcess;
 
 public class CorrelateGenesNames {
@@ -25,7 +27,7 @@ public class CorrelateGenesNames {
 		// one line with 2083 columns contains the Janilla genes names
 		// exmpl name GMR_10C06_AE_01
 		// we convert it to Excel file name GMR_10C06_AE_01 => GMR10C06
-		File iDGenespath = PathUtils.File(MyPaths.dros_linesIDtoJaneliaID);
+		File iDGenespath = PathsUtils.File(DrosLinesPaths.dros_linesIDtoJaneliaID);
 
 		System.out.println("Get infos..");
 		TxtProcess.infos(iDGenespath);
@@ -42,20 +44,20 @@ public class CorrelateGenesNames {
 		System.out.println("Final Dros lines genes = " + drosLinesGenes.size());
 
 		// Save it to file
-		File resultFile = PathUtils.ResultFile(MyPaths.dros_lines_expressed_genes_names);
+		File resultFile = PathsUtils.ResultFile(DrosLinesPaths.dros_lines_expressed_genes_names);
 		GsonIO.save(resultFile, drosLinesGenes);
 		
-		
+
 		//2- from Aerts
 
-		File aertsInput = PathUtils.File(MyPaths.aerts_57k_cells_raw);
+		File aertsInput = PathsUtils.File(AertsPaths.aerts_57k_cells_raw);
 		System.out.println("Get infos..");
 		TxtProcess.infos(iDGenespath);
 		List<String> aertsGenes = Aerts_57k_cells.getGenesNames(aertsInput);
 		System.out.println("Final Aerts genes  : " + aertsGenes.size());
 
 		// Save it to file
-		resultFile = PathUtils.ResultFile(MyPaths.aerts_57k_genes_names);
+		resultFile = PathsUtils.ResultFile(AertsPaths.aerts_57k_genes_names);
 		GsonIO.save(resultFile, aertsGenes);
 		
 		
@@ -64,7 +66,7 @@ public class CorrelateGenesNames {
 		System.out.println("Final concat genes  : " + concat.size());
 
 		// Save it to file
-		resultFile = PathUtils.ResultFile(MyPaths.concat_genes);
+		resultFile = PathsUtils.ResultFile(ResultsPaths.concat_genes);
 		GsonIO.save(resultFile, concat);
 	}
 

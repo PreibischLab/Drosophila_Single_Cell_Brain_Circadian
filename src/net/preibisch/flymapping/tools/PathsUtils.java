@@ -1,10 +1,10 @@
-package net.preibisch.flymapping.config;
+package net.preibisch.flymapping.tools;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.nio.file.Paths;
 
-public class PathUtils {
+public class PathsUtils {
 	public static File Data() throws FileNotFoundException {
 		File f = new File(Paths.get("").toAbsolutePath().getParent().getParent().resolve(MyPaths.SEQUENCING_FOLDER).toString());
 		if(!(f.isDirectory()&&(f.exists()))) throw new FileNotFoundException();

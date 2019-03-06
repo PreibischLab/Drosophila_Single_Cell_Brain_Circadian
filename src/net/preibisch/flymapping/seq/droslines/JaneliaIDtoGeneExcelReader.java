@@ -14,14 +14,13 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 
-import net.preibisch.flymapping.config.MyPaths;
-import net.preibisch.flymapping.config.PathUtils;
+import net.preibisch.flymapping.tools.PathsUtils;
 import net.preibisch.flymapping.tools.PrettyPrintingMap;
 
 public class JaneliaIDtoGeneExcelReader {
 
 	public static Map<String,String> getJanilaGeneMap() throws EncryptedDocumentException, InvalidFormatException, IOException{
-		File f = PathUtils.File(MyPaths.Janelia_map_janelia_IDtoGene_name);
+		File f = PathsUtils.File(DrosLinesPaths.Janelia_map_janelia_IDtoGene_name);
 		Workbook workbook = WorkbookFactory.create(f);
 		HashedMap<String, String> janilaMapId = new HashedMap();
 		for(Sheet sheet: workbook) {

@@ -4,8 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.Callable;
 
-import net.preibisch.flymapping.config.MyPaths;
-import net.preibisch.flymapping.config.PathUtils;
+import net.preibisch.flymapping.tools.PathsUtils;
 import picocli.CommandLine;
 
 public class PrepareDrosLine implements Callable<Void> {
@@ -16,13 +15,15 @@ public class PrepareDrosLine implements Callable<Void> {
 
 	public Void call() throws IOException {
 		System.out.println("Start prepare Dros Lines ");
-		File dros_lines_expr_values_2083_genes_raw_path = PathUtils.File(MyPaths.dros_lines_expr_values_2083_genes);
+		File dros_lines_expr_values_2083_genes_raw_path = PathsUtils
+				.File(DrosLinesPaths.dros_lines_expr_values_2083_genes);
 
-		File dros_lines_expr_values_2083_genes_output_folder = PathUtils
-				.ResultFolder(MyPaths.dros_lines_expr_values_2083_genes_folder);
+		File dros_lines_expr_values_2083_genes_output_folder = PathsUtils
+				.ResultFolder(DrosLinesPaths.dros_lines_expr_values_2083_genes_folder);
 
 		int chuncks = Dros_lines.toChuncks(dros_lines_expr_values_2083_genes_raw_path,
-				dros_lines_expr_values_2083_genes_output_folder, MyPaths.dros_lines_expr_values_2083_genes_folder, 200);
+				dros_lines_expr_values_2083_genes_output_folder,
+				DrosLinesPaths.dros_lines_expr_values_2083_genes_folder, 200);
 		System.out.println("Chunks: " + chuncks);
 
 		System.out.println("Finish prepare Dros Lines ");

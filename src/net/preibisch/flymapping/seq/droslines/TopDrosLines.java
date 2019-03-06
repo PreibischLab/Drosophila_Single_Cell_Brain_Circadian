@@ -9,9 +9,8 @@ import java.util.concurrent.Callable;
 import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 
-import net.preibisch.flymapping.config.MyPaths;
-import net.preibisch.flymapping.config.PathUtils;
 import net.preibisch.flymapping.tools.GsonIO;
+import net.preibisch.flymapping.tools.PathsUtils;
 import net.preibisch.flymapping.tools.TxtProcess;
 import picocli.CommandLine;
 import picocli.CommandLine.Option;
@@ -36,12 +35,13 @@ public class TopDrosLines implements Callable<Void> {
 
 		// This file is 7065 columns by 2083 lines
 		// We will process it to get the more expressed / more than X = 0.4
-		File dros_lines_expr_values_2083_genes_raw_path = PathUtils.File(MyPaths.dros_lines_expr_values_2083_genes);
+		File dros_lines_expr_values_2083_genes_raw_path = PathsUtils
+				.File(DrosLinesPaths.dros_lines_expr_values_2083_genes);
 
 		// one line with 2083 columns contains the Janilla genes names
 		// exmpl name GMR_10C06_AE_01
 		// we convert it to Excel file name GMR_10C06_AE_01 => GMR10C06
-		File iDGenespath = PathUtils.File(MyPaths.dros_linesIDtoJaneliaID);
+		File iDGenespath = PathsUtils.File(DrosLinesPaths.dros_linesIDtoJaneliaID);
 
 		System.out.println("Get infos..");
 		TxtProcess.infos(dros_lines_expr_values_2083_genes_raw_path);
@@ -64,7 +64,7 @@ public class TopDrosLines implements Callable<Void> {
 		System.out.println("Final Size = " + expressedGenesDrosLines.size());
 
 		// Save it to file
-		File resultFile = PathUtils.ResultFile(MyPaths.dros_lines_expr_values_2083_genes_more_than0_4);
+		File resultFile = PathsUtils.ResultFile(DrosLinesPaths.dros_lines_expr_values_2083_genes_more_than0_4);
 		GsonIO.save(resultFile, expressedGenesDrosLines);
 
 		expressedGenesDrosLines.clear();
