@@ -40,4 +40,9 @@ public class PathsUtils {
 	public static File ResultFile(String file) throws FileNotFoundException {
 		return Result(Result(), file);
 	}
+
+	public static File ResultFileFromString(String string) throws FileNotFoundException {
+		String file = string + ".json";
+		return Result(Result(), file);
+	}
 }

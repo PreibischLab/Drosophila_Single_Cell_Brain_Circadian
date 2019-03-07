@@ -329,4 +329,45 @@ public class Aerts_57k_cells {
 
 	}
 
+	public static HashMap<String, Double> getNormalisedGenesForCell(File input, List<String> genes, String cellExample)
+			throws IOException {
+
+		long col = TxtProcess.columns(input);
+		long lines = TxtProcess.lines(input);
+
+		TxtProcess.infos(input.toString(), col, lines);
+
+		Scanner sc = new Scanner(input, "UTF-8");
+
+		List<String> cellsNames = getCellsNamesFromLine(sc.nextLine());
+
+		Integer cellIndex = cellsNames.indexOf(cellExample);
+
+//		Integer max = getMaxExpressed(input, cellsNames);
+//
+//		System.out.println("Max val: " + max);
+
+		HashMap<String, Double> elements = new HashMap<>();
+
+		while (sc.hasNextLine()) {
+			String line = sc.nextLine();
+			LinkedList<String> elm = new LinkedList<String>(Arrays.asList(line.split("	")));
+			String geneName = elm.get(0).replace("\"", "");
+
+			if (genes.contains(geneName)) {
+				elm.remove(0);
+				double geneVal = Double.parseDouble(elm.get(cellIndex));
+//				/ (max * 1.0f);
+
+				if (geneVal > 0)
+					elements.put(geneName, geneVal);
+			}
+
+
+		}
+
+		return elements;
+
+	}
+
 }
