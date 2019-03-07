@@ -8,4 +8,5 @@ public class ResultsPaths {
 
 	public static final String cells_names_Cluster5_Aerts = "cells_names_Cluster5_Aerts.json";
 	public static final String JanilaIDsPerGenes = "JanilaIDsPerGenes.json";
+	public static final String JanilaIDsForSuperVoxels = "JanilaIDsForSuperVoxels.json";
 }

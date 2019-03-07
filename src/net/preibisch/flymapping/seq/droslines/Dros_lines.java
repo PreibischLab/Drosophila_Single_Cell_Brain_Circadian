@@ -25,6 +25,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonReader;
 
+import net.preibisch.flymapping.img.JanilaId;
 import net.preibisch.flymapping.tools.TxtProcess;
 
 public class Dros_lines {
@@ -139,7 +140,7 @@ public class Dros_lines {
 //			HashMap<Integer, String> geneInfo = new HashMap<>();
 //			geneInfo.put(index, getJanilaName(ids.get(index)));
 
-			String janilaId = getJanilaName(ids.get(index));
+			String janilaId = JanilaId.getJanilaName(ids.get(index));
 			if (janilaMapIdGenes.containsKey(janilaId)) {
 				String geneName = janilaMapIdGenes.get(janilaId);
 
@@ -168,7 +169,7 @@ public class Dros_lines {
 		System.out.println("Ids size = " + ids.size());
 		List<String> notFound = new ArrayList<>();
 		for(String id : ids){
-			String janilaId = getJanilaName(id);
+			String janilaId = JanilaId.getJanilaName(id);
 			if (janilaMapIdGenes.containsKey(janilaId)) {
 				String geneName = janilaMapIdGenes.get(janilaId);	
 				if(!expressedGenes.contains(geneName)) expressedGenes.add(geneName);	
@@ -181,17 +182,7 @@ public class Dros_lines {
 		return expressedGenes;
 	}
 
-	private static String getJanilaName(String input) {
-		String[] parts = input.split("_");
-		String name = input;
-		try {
-			name = parts[0] + parts[1];
-		} catch (Exception e) {
-			System.out.println("Error convert name: " + input);
-		}
-		name = name.replace("'", "");
-		return name;
-	}
+
 
 	private static Map<Integer, Float> getMorethan(List<Float> list, double prob) {
 		Map<Integer, Float> map = new LinkedHashMap<Integer, Float>();

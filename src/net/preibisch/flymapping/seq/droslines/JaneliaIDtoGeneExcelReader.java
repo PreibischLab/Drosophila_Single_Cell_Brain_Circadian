@@ -26,7 +26,7 @@ public class JaneliaIDtoGeneExcelReader {
 
 		Map<String, List<String>> janilaIDsPerGenes = getJanilaIDsPerGene();
 
-		File resultFile = PathsUtils.ResultFileFromString(ResultsPaths.JanilaIDsPerGenes);
+		File resultFile = PathsUtils.ResultFile(ResultsPaths.JanilaIDsPerGenes);
 
 		GsonIO.save(resultFile, janilaIDsPerGenes);
 		System.out.println("Finish get expressed cells ");

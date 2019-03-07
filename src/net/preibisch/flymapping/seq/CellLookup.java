@@ -12,13 +12,14 @@ import net.preibisch.flymapping.tools.PathsUtils;
 
 public class CellLookup {
 	public static void main(String[] args) throws IOException {
-		final String cellExample = ClustersExamples.cluster_2[0];
-		System.out.println("Start get expressed cells ");
-
 		File concat_genes_path = PathsUtils.ResultFile(ResultsPaths.concat_genes);
 		List<String> genes = GsonIO.read(concat_genes_path, List.class);
 
 		System.out.println("Size :" + genes.size());
+
+//		final String cellExample = ClustersExamples.cluster_2[1];
+		for (String cellExample : ClustersExamples.cluster_2) {
+			System.out.println("Start get expressed cells ");
 
 		File input = PathsUtils.File(AertsPaths.aerts_57k_cells_raw);
 
@@ -32,6 +33,6 @@ public class CellLookup {
 
 		GsonIO.save(resultFile, result);
 		System.out.println("Finish get expressed cells ");
-
+		}
 	}
 }
