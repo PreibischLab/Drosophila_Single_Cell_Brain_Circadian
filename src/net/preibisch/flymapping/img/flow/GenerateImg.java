@@ -1,8 +1,6 @@
-package net.preibisch.flymapping.img;
+package net.preibisch.flymapping.img.flow;
 
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Map;
 
@@ -16,40 +14,31 @@ import net.imglib2.img.ImgFactory;
 import net.imglib2.img.cell.CellImgFactory;
 import net.imglib2.img.display.imagej.ImageJFunctions;
 import net.imglib2.type.numeric.real.FloatType;
+import net.preibisch.flymapping.img.ImgPaths;
 import net.preibisch.flymapping.seq.ClustersExamples;
 import net.preibisch.flymapping.tools.GsonIO;
-import net.preibisch.flymapping.tools.IOFunctions;
+import net.preibisch.flymapping.tools.ImgUtils;
 import net.preibisch.flymapping.tools.PathsUtils;
 
 public class GenerateImg {
-//	private static final String janilaIdsPerCellFile = "SV_ACACCAAAGGTTCCTA-DGRP-551_0d_r1.json";
-//
-//	private static final String resultImgName = "SV_ACACCAAAGGTTCCTA-DGRP-551_0d_r1.tiff";
 
 	public static void main(String[] args) throws FileNotFoundException {
 
 		System.out.println("Start supervoxel HashMap generating..");
 
 //		ImageJFunctions.show(supervoxels);
-		File imgFile = PathsUtils.File(ImgPaths.SUPER_VOXEL);
-		long[] dims = getDims(openImg(imgFile));
-
-//		File supervoxelExpressionPath = ;
-//		Map<Integer, Double> supervoxelExpression = 
-//		Map<Integer, List<long[]>> supervoxelMap = ;
+		long[] dims = ImgUtils.getDims(ImgUtils.openImg(PathsUtils.File(ImgPaths.SUPER_VOXEL)));
 
 		System.out.println("Start generating .. ");
 
-		Type idsPerCell = new TypeToken<Map<Integer, Double>>() {
-		}.getType();
-		Type hashmapType = new TypeToken<Map<Integer, List<List<Integer>>>>() {
-		}.getType();
 		Map<Integer, List<List<Integer>>> elm2 = GsonIO.read(PathsUtils.ResultFile(ImgPaths.SUPER_VOXEL_HASHMAP),
-				hashmapType);
+				new TypeToken<Map<Integer, List<List<Integer>>>>() {
+				}.getType());
 		
 		for (String file : ClustersExamples.cluster_2) {
 		RandomAccessibleInterval<FloatType> resultImg = generateImg(
-				GsonIO.read(PathsUtils.ResultFile("SV_"+file+".json"), idsPerCell),
+					GsonIO.read(PathsUtils.ResultFile("SV_" + file + ".json"), new TypeToken<Map<Integer, Double>>() {
+					}.getType()),
 				elm2, dims);
 
 		System.out.println("Finish generating ");
@@ -57,18 +46,6 @@ public class GenerateImg {
 			ij.IJ.save(resultImgPlus, PathsUtils.ResultFile("SV_" + file + ".tiff").getAbsolutePath());
 		}
 
-	}
-
-	private static long[] getDims(RandomAccessibleInterval<FloatType> img) {
-		int dims = img.numDimensions();
-		long[] dimensions = new long[dims];
-		for (int i = 0; i < dims; i++)
-			dimensions[i] = img.dimension(i);
-		return dimensions;
-	}
-
-	private static RandomAccessibleInterval<FloatType> openImg(File imgFile) {
-		return IOFunctions.openAs32Bit(imgFile);
 	}
 
 	public static RandomAccessibleInterval<FloatType> generateImg(Map<Integer, Double> supervoxelExpression,
