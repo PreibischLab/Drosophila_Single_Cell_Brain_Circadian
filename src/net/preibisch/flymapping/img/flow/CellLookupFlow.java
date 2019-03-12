@@ -86,7 +86,8 @@ public class CellLookupFlow {
 
 //			Map<Integer, Double> supervoxelExpression = GsonIO.read(PathsUtils.ResultFile("SV_" + file + ".json"), new TypeToken<Map<Integer, Double>>() {}.getType());
 
-			RandomAccessibleInterval<FloatType> resultImg = GenerateImg.generateImg(supervoxelExpression, elm2, dims);
+				RandomAccessibleInterval<FloatType> resultImg = GenerateImg.generateImg(supervoxelExpression,
+						supervoxelHashMap, dims);
 
 			System.out.println("Finish generating img");
 			ImagePlus resultImgPlus = ImageJFunctions.wrap(resultImg, "");
