@@ -1,4 +1,4 @@
-package net.preibisch.flymapping.img.flow;
+package net.preibisch.flymapping.flow;
 
 import java.io.File;
 import java.io.IOException;

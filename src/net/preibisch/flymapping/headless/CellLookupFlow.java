@@ -1,4 +1,4 @@
-package net.preibisch.flymapping.img.flow;
+package net.preibisch.flymapping.headless;
 
 import static net.preibisch.flymapping.tools.GsonIO.read;
 
@@ -14,6 +14,8 @@ import ij.ImagePlus;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.img.display.imagej.ImageJFunctions;
 import net.imglib2.type.numeric.real.FloatType;
+import net.preibisch.flymapping.flow.CellLookup;
+import net.preibisch.flymapping.flow.GenerateImg;
 import net.preibisch.flymapping.img.ImgPaths;
 import net.preibisch.flymapping.img.JanilaId;
 import net.preibisch.flymapping.seq.ClustersExamples;

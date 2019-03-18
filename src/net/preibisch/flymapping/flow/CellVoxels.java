@@ -1,4 +1,4 @@
-package net.preibisch.flymapping.img.flow;
+package net.preibisch.flymapping.flow;
 
 import static net.preibisch.flymapping.tools.GsonIO.read;
 
