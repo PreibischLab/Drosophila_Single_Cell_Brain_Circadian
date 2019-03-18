@@ -22,8 +22,8 @@ import net.preibisch.flymapping.tools.PathsUtils;
 
 public class SuperVoxelMapping {
 	public static void main(String[] args) throws IOException {
-//		generateMap();
-		testMap();
+		generateMap();
+//		testMap();
 	}
 
 	private static void generateMap() throws IOException {
@@ -72,7 +72,7 @@ public class SuperVoxelMapping {
 		while (c.hasNext()) {
 			c.fwd();
 			final List<Integer> pos = getPosition(c, dims);
-			final Integer x = (int) (c.next().getRealDouble());
+			final Integer x = (int) Math.round(c.get().getRealDouble());
 			if (x > 0) {
 				if (voxelsMap.containsKey(x)) {
 					voxelsMap.get(x).add(pos);
