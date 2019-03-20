@@ -140,7 +140,7 @@ public class Dros_lines {
 //			HashMap<Integer, String> geneInfo = new HashMap<>();
 //			geneInfo.put(index, getJanilaName(ids.get(index)));
 
-			String janilaId = JanilaId.getJanilaName(ids.get(index));
+			String janilaId = JanilaId.formatName(ids.get(index));
 			if (janilaMapIdGenes.containsKey(janilaId)) {
 				String geneName = janilaMapIdGenes.get(janilaId);
 
@@ -156,33 +156,32 @@ public class Dros_lines {
 			index++;
 		}
 		System.out.println("index: " + index);
-		System.out.println("NOT FOUND: "+String.join(" - ", notFound));
+		System.out.println("NOT FOUND: " + String.join(" - ", notFound));
 
 		return elements;
 	}
-	
-	public static List<String> getExpressedGenes(File iDGenespath,
-			Map<String, String> janilaMapIdGenes) throws IOException {
-		
+
+	public static List<String> getExpressedGenes(File iDGenespath, Map<String, String> janilaMapIdGenes)
+			throws IOException {
+
 		List<String> expressedGenes = new ArrayList<>();
 		List<String> ids = Arrays.asList(new Scanner(iDGenespath, "UTF-8").nextLine().split("	"));
 		System.out.println("Ids size = " + ids.size());
 		List<String> notFound = new ArrayList<>();
-		for(String id : ids){
-			String janilaId = JanilaId.getJanilaName(id);
+		for (String id : ids) {
+			String janilaId = JanilaId.formatName(id);
 			if (janilaMapIdGenes.containsKey(janilaId)) {
-				String geneName = janilaMapIdGenes.get(janilaId);	
-				if(!expressedGenes.contains(geneName)) expressedGenes.add(geneName);	
+				String geneName = janilaMapIdGenes.get(janilaId);
+				if (!expressedGenes.contains(geneName))
+					expressedGenes.add(geneName);
 			} else {
 				notFound.add(janilaId);
 			}
 		}
-		System.out.println("NOT FOUND: "+String.join(" - ", notFound));
+		System.out.println("NOT FOUND: " + String.join(" - ", notFound));
 
 		return expressedGenes;
 	}
-
-
 
 	private static Map<Integer, Float> getMorethan(List<Float> list, double prob) {
 		Map<Integer, Float> map = new LinkedHashMap<Integer, Float>();
@@ -253,5 +252,56 @@ public class Dros_lines {
 		Map<Integer, Float> top = getTopN(n, array);
 
 		printMap(top);
+	}
+
+	public static List<Double> avg(List<Double> l1, List<Double> l2) {
+		List<Double> result = new ArrayList<>();
+		
+		for (int i = 0; i < l1.size(); i++)
+			result.add((l1.get(i) + l2.get(i)) / 2.0);
+		return result;
+		
+	}
+
+	public static List<String> getIDs(File file) throws FileNotFoundException {
+		List<String> ids = Arrays.asList(new Scanner(file, "UTF-8").nextLine().split("	"));
+		System.out.println("Ids size = " + ids.size());
+		return ids;
+	}
+
+	public static HashMap<String, List<Double>> getFoundConcat(File input, List<String> ids,
+			Map<String, String> JaneliaIdToGenes) throws FileNotFoundException {
+
+		int index = 0;
+
+		Scanner sc = new Scanner(input, "UTF-8");
+		HashMap<String, List<Double>> elements = new HashMap<String, List<Double>>();
+		List<String> notFound = new ArrayList<>();
+
+		while (sc.hasNextLine()) {
+			List<Double> elm = new LinkedList<String>(Arrays.asList(sc.nextLine().split("	"))).stream()
+					.map(Double::parseDouble).collect(Collectors.toList());
+
+			String janilaId = JanilaId.formatName(ids.get(index));
+
+			if (JaneliaIdToGenes.containsKey(janilaId)) {
+				String geneName = JaneliaIdToGenes.get(janilaId);
+
+				if (elements.containsKey(geneName)) {
+					System.out.println(index + "-" + geneName + " found before");
+					List<Double> avg = avg(elements.get(geneName), elm);
+
+				}
+				elements.put(geneName, elm);
+			} else {
+				notFound.add(janilaId);
+			}
+
+			index++;
+		}
+		System.out.println("index: " + index);
+		System.out.println("NOT FOUND: " + String.join(" - ", notFound));
+
+		return elements;
 	}
 }

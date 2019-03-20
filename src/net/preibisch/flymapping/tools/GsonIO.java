@@ -16,6 +16,7 @@ import com.google.gson.stream.JsonReader;
 public class GsonIO<T> {
 
 	public static void save(File path, Object obj) throws IOException {
+		System.out.println("File to save: " + path.getAbsolutePath());
 		Writer writer = new OutputStreamWriter(new FileOutputStream(path), "UTF-8");
 		Gson gson = new GsonBuilder().create();
 		gson.toJson(obj, writer);
@@ -32,9 +33,11 @@ public class GsonIO<T> {
 	}
 
 	public static <T extends Object> T read(File path, Type type) throws FileNotFoundException {
+		System.out.println("file to read: " + path.getAbsolutePath());
 		Gson gson = new Gson();
 		JsonReader reader = new JsonReader(new FileReader(path));
 		T data = gson.fromJson(reader, type);
+		System.out.println("file readed: " + path.getAbsolutePath());
 		return data;
 	}
 }

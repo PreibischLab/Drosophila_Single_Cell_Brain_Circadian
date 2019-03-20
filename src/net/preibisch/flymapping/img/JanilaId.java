@@ -49,13 +49,13 @@ public class JanilaId {
 		List<String> janilaNames = new ArrayList<>();
 		List<String> ids = Arrays.asList(new Scanner(supervoxelIDs, "UTF-8").nextLine().split("	"));
 		for (String id : ids) {
-			String janilaId = getJanilaName(id);
+			String janilaId = formatName(id);
 			janilaNames.add(janilaId);
 		}
 		return janilaNames;
 	}
 
-	public static String getJanilaName(String input) {
+	public static String formatName(String input) {
 		String[] parts = input.split("_");
 		String name = input;
 		try {

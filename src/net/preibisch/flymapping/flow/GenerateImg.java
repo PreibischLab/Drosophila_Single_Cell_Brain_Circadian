@@ -62,6 +62,7 @@ public class GenerateImg {
 
 		int i = 0;
 		for (Map.Entry<Integer, Double> e : supervoxelExpression.entrySet()) {
+			try {
 			System.out.println(i + "-" + e.getKey() + "-" + e.getValue());
 			List<List<Integer>> listPos = supervoxelMap.get(e.getKey());
 			System.out.println(i + "-" + listPos.size());
@@ -75,6 +76,10 @@ public class GenerateImg {
 				// type )
 				randomAccess.get().set(e.getValue().floatValue());
 
+				}
+			} catch (Exception ex) {
+				System.out.println("Error pos: " + i);
+				System.out.println(ex.getMessage());
 			}
 			i++;
 		}

@@ -246,6 +246,30 @@ public class Aerts_57k_cells {
 
 	}
 
+	public static Integer getMaxExpressed(File input) throws IOException {
+		Scanner sc = new Scanner(input, "UTF-8");
+		sc.nextLine();
+		Integer max = 0;
+		int i = 0;
+		while (sc.hasNextLine()) {
+			String line = sc.nextLine();
+			LinkedList<String> elm = new LinkedList<String>(Arrays.asList(line.split("	")));
+			elm.removeFirst();
+			List<Integer> vals = elm.stream().map(Integer::parseInt).collect(Collectors.toList());
+			elm.clear();
+			Integer tmp = getMax(vals);
+			if (tmp > max) {
+				max = tmp;
+				int index = vals.indexOf(tmp);
+				System.out.println("Line: " + i + " - Column: " + index + " - max: " + max);
+			}
+			i++;
+		}
+		System.out.println("Finished : " + i);
+		return max;
+
+	}
+
 	private static Integer getMax(List<Integer> vals) {
 		Integer max = Collections.max(vals);
 		return max;
@@ -329,7 +353,8 @@ public class Aerts_57k_cells {
 
 	}
 
-	public static HashMap<String, Double> getNormalisedGenesForCell(File input, List<String> genes, String cellExample)
+	public static HashMap<String, Double> getNormalisedGenesForCell(File input, List<String> genes, String cellExample,
+			Integer max)
 			throws IOException {
 
 		long col = TxtProcess.columns(input);
@@ -343,9 +368,7 @@ public class Aerts_57k_cells {
 
 		Integer cellIndex = cellsNames.indexOf(cellExample);
 
-//		Integer max = getMaxExpressed(input, cellsNames);
-//
-//		System.out.println("Max val: " + max);
+
 
 		HashMap<String, Double> elements = new HashMap<>();
 
@@ -357,9 +380,10 @@ public class Aerts_57k_cells {
 			if (genes.contains(geneName)) {
 				elm.remove(0);
 				double geneVal = Double.parseDouble(elm.get(cellIndex));
+				geneVal = geneVal / max;
 //				/ (max * 1.0f);
 
-				if (geneVal > 0)
+//				if (geneVal > 0)
 					elements.put(geneName, geneVal);
 			}
 
