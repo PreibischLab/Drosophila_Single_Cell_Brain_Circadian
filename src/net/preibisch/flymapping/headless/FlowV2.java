@@ -1,15 +1,6 @@
 package net.preibisch.flymapping.headless;
 
-import static net.preibisch.flymapping.tools.GsonIO.read;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import com.google.gson.reflect.TypeToken;
-
 import ij.ImagePlus;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.img.display.imagej.ImageJFunctions;
@@ -26,10 +17,16 @@ import net.preibisch.flymapping.tools.GsonIO;
 import net.preibisch.flymapping.tools.ImgUtils;
 import net.preibisch.flymapping.tools.PathsUtils;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static net.preibisch.flymapping.tools.GsonIO.read;
+
 public class FlowV2 {
 	public static void main(String[] args) throws IOException {
-
-//		
 
 		// For CellLokup
 		List<String> concatFoundGenes = GsonIO.read(PathsUtils.ResultFile(ResultsPaths.concat_genes), List.class);

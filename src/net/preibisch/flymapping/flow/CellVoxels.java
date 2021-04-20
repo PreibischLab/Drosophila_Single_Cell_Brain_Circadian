@@ -1,30 +1,28 @@
 package net.preibisch.flymapping.flow;
 
-import static net.preibisch.flymapping.tools.GsonIO.read;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.List;
-import java.util.Map;
-
 import com.google.gson.reflect.TypeToken;
-
 import net.preibisch.flymapping.img.JanilaId;
 import net.preibisch.flymapping.seq.ClustersExamples;
 import net.preibisch.flymapping.seq.ResultsPaths;
 import net.preibisch.flymapping.tools.GsonIO;
 import net.preibisch.flymapping.tools.PathsUtils;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
+
+import static net.preibisch.flymapping.tools.GsonIO.read;
+
+/***
+ * This Class would be used the first,
+ */
 public class CellVoxels {
 
 	private static final String file = "ACACCAAAGGTTCCTA-DGRP-551_0d_r1.json";
 	private static final String janilaIdsPerCellFile = "SV_ACACCAAAGGTTCCTA-DGRP-551_0d_r1.json";
 
 	public static void main(String[] args) throws IOException {
-
-//		generateJanilaIdsPerCell();
-		// We have cell expression pre janilaID superVoxol
-//		Map<String, Double> cellJanilaId = read(PathsUtils.ResultFile(janilaIdsPerCellFile), Map.class);
 
 		Map<String, List<String>> janilaIDsPerGenes = GsonIO.read(PathsUtils.ResultFile(ResultsPaths.JanilaIDsPerGenes),
 				new TypeToken<Map<String, List<String>>>() {
@@ -44,7 +42,6 @@ public class CellVoxels {
 
 			File janilaIdsFile = PathsUtils.ResultFileFromString("SV_" + file);
 			GsonIO.save(janilaIdsFile, supervoxelExpression);
-
 		}
 	}
 

@@ -1,13 +1,6 @@
 package net.preibisch.flymapping.seq.correlate;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.poi.EncryptedDocumentException;
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-
+import com.sun.media.sound.InvalidFormatException;
 import net.preibisch.flymapping.seq.ResultsPaths;
 import net.preibisch.flymapping.seq.aerts.AertsPaths;
 import net.preibisch.flymapping.seq.aerts.Aerts_57k_cells;
@@ -17,7 +10,17 @@ import net.preibisch.flymapping.seq.droslines.JaneliaIDtoGeneExcelReader;
 import net.preibisch.flymapping.tools.GsonIO;
 import net.preibisch.flymapping.tools.PathsUtils;
 import net.preibisch.flymapping.tools.TxtProcess;
+import org.apache.poi.EncryptedDocumentException;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
+
+/***
+ * 3
+ * Correlate
+ */
 public class CorrelateGenesNames {
 	public static void main(String[] args) throws IOException, EncryptedDocumentException, InvalidFormatException {
 
