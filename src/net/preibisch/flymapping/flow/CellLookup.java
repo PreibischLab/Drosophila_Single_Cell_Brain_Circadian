@@ -1,10 +1,5 @@
 package net.preibisch.flymapping.flow;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-
 import net.preibisch.flymapping.seq.ClustersExamples;
 import net.preibisch.flymapping.seq.ResultsPaths;
 import net.preibisch.flymapping.seq.aerts.AertsPaths;
@@ -12,10 +7,15 @@ import net.preibisch.flymapping.seq.aerts.Aerts_57k_cells;
 import net.preibisch.flymapping.tools.GsonIO;
 import net.preibisch.flymapping.tools.PathsUtils;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+
 public class CellLookup {
 	public static void main(String[] args) throws IOException {
 
-		List<String> concatFoundGenes = GsonIO.read(PathsUtils.ResultFile(ResultsPaths.concat_genes),
+		List<String> concatFoundGenes = GsonIO.read(PathsUtils.getPathForResultFile(ResultsPaths.GenesNamesWhichExistsInAertsAndDrosLines),
 				List.class);
 
 		File input = PathsUtils.File(AertsPaths.aerts_57k_cells_raw);

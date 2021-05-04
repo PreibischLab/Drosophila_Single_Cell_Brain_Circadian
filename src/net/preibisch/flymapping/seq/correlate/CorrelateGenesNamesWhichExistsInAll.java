@@ -17,17 +17,19 @@ import java.util.Map;
 /***
  * 3
  * Correlate
+ * In Aerts exist 7096 genes
+ * In Drosline exists 2204 genetically targeted populations of neurons.
+ * The goal of this class is to get the genes that exists in both of them, should be <= 2204
  */
-public class CorrelateGenesNames {
+public class CorrelateGenesNamesWhichExistsInAll {
 	public static void main(String[] args) throws Exception {
 
-		
 		// 1- from Dros lines
 		
 		// one line with 2083 columns contains the Janilla genes names
 		// exmpl name GMR_10C06_AE_01
 		// we convert it to Excel file name GMR_10C06_AE_01 => GMR10C06
-		File iDGenespath = PathsUtils.File(DrosLinesPaths.dros_linesIDtoJaneliaID);
+		File iDGenespath = PathsUtils.getInputPathForFile(DrosLinesPaths.dros_linesIDtoJaneliaID);
 
 		System.out.println("Get infos..");
 		TxtProcess.infos(iDGenespath);
@@ -44,21 +46,21 @@ public class CorrelateGenesNames {
 		System.out.println("Final Dros lines genes = " + drosLinesGenes.size());
 
 		// Save it to file
-		File resultFile = PathsUtils.ResultFile(DrosLinesPaths.dros_lines_expressed_genes_names);
+		File resultFile = PathsUtils.getPathForResultFile(DrosLinesPaths.dros_lines_expressed_genes_names);
 		GsonIO.save(resultFile, drosLinesGenes);
 		
 
 		//2- from Aerts
 
-		File aertsInput = PathsUtils.File(AertsPaths.aerts_57k_cells_raw);
+		File aertsInput = PathsUtils.getInputPathForFile(AertsPaths.aerts_57k_cells_raw);
 		System.out.println("Get infos..");
 		TxtProcess.infos(iDGenespath);
 		List<String> aertsGenes = Aerts_57k_cells.getGenesNames(aertsInput);
 		System.out.println("Final Aerts genes  : " + aertsGenes.size());
 
 		// Save it to file
-		resultFile = PathsUtils.ResultFile(AertsPaths.aerts_57k_genes_names);
-		GsonIO.save(resultFile, aertsGenes);
+//		resultFile = PathsUtils.ResultFile(AertsPaths.aerts_57k_genes_names);
+//		GsonIO.save(resultFile, aertsGenes);
 		
 		
 		//3- Get similarity
@@ -66,7 +68,7 @@ public class CorrelateGenesNames {
 		System.out.println("Final concat genes  : " + concat.size());
 
 		// Save it to file
-		resultFile = PathsUtils.ResultFile(ResultsPaths.concat_genes);
+		resultFile = PathsUtils.getPathForResultFile(ResultsPaths.GenesNamesWhichExistsInAertsAndDrosLines);
 		GsonIO.save(resultFile, concat);
 	}
 

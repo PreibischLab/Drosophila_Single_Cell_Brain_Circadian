@@ -13,11 +13,15 @@ import java.util.concurrent.Callable;
 /***
  * The aerts raw file is very big, so we created this class to:
  * 1- split raw in 1899 files
- * ech file represent one cell, and the expression of 57k genes
- * 1899 cells for 57k genes
+ * ech file represent one gene, and the expression of 57k cells
+ * 7096 genes for 57k cells
  * 2- Create json file for only gene names
  * and json file for only cell names
+ *
+ * PS: there is other raw file expended with 157k cells
  */
+
+@CommandLine.Command(name = "aerts")
 public class AertsDataPreparation implements Callable<Void> {
 
     @Option(names = {"-i", "--input"}, required = false, description = "the path of input file aerts_57k_cells_raw.txt ")
@@ -31,9 +35,10 @@ public class AertsDataPreparation implements Callable<Void> {
         File inputFile = new File(input);
         File outputFolder = new File(output);
         AertsDataPreparator aertsPreparator = new AertsDataPreparator(inputFile, outputFolder);
-        aertsPreparator.generateGenesFile();
-        aertsPreparator.generateCellsFile();
-        aertsPreparator.splitInFiles();
+        aertsPreparator.showInfos();
+//        aertsPreparator.generateGenesFile();
+//        aertsPreparator.generateCellsFile();
+//        aertsPreparator.splitInFiles();
 
         System.out.println("Finish preparing Aerts. ");
         return null;

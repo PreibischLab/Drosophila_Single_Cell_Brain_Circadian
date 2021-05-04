@@ -29,7 +29,7 @@ public class CellLookupFlow {
 	public static void main(String[] args) throws IOException {
 
 		// For CellLokup
-		List<String> concatFoundGenes = GsonIO.read(PathsUtils.ResultFile(ResultsPaths.concat_genes), List.class);
+		List<String> concatFoundGenes = GsonIO.read(PathsUtils.getPathForResultFile(ResultsPaths.GenesNamesWhichExistsInAertsAndDrosLines), List.class);
 
 		System.out.println("Concat Genes Size :" + concatFoundGenes.size());
 

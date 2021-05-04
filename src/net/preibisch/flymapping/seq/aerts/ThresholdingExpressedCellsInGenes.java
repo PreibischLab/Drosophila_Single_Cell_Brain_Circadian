@@ -26,7 +26,7 @@ public class ThresholdingExpressedCellsInGenes implements Callable<Void> {
 	public Void call() throws FileNotFoundException, IOException {
 		System.out.println("Start get expressed cells ");
 		
-		File concat_genes_path = PathsUtils.ResultFile(ResultsPaths.concat_genes);
+		File concat_genes_path = PathsUtils.getPathForResultFile(ResultsPaths.GenesNamesWhichExistsInAertsAndDrosLines);
 		List<String> genes = GsonIO.read(concat_genes_path, List.class);
 
 		System.out.println("Size :" + genes.size());

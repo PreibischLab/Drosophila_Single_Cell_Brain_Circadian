@@ -2,6 +2,7 @@ package net.preibisch.flymapping.seq.aerts;
 
 import net.preibisch.flymapping.tools.GsonIO;
 import net.preibisch.flymapping.tools.PathsUtils;
+import net.preibisch.flymapping.tools.TxtProcess;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,6 +24,12 @@ public class AertsDataPreparator {
 		this.input = input;
 		this.output = output;
 		this.chunk = chunk;
+	}
+	public void showInfos() throws IOException {
+		long col = TxtProcess.columns(input);
+		long lines = TxtProcess.lines(input);
+
+		TxtProcess.infos(input.toString(), col, lines);
 	}
 
 	public  AertsDataPreparator(File input,File output){

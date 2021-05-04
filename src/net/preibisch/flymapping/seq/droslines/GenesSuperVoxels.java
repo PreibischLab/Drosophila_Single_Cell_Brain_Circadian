@@ -48,7 +48,7 @@ public class GenesSuperVoxels {
 		}.getType());
 		System.out.println("File size : " + genesSV.size());
 
-		List<String> concatFoundGenes = GsonIO.read(PathsUtils.ResultFile(ResultsPaths.concat_genes), List.class);
+		List<String> concatFoundGenes = GsonIO.read(PathsUtils.getPathForResultFile(ResultsPaths.GenesNamesWhichExistsInAertsAndDrosLines), List.class);
 		HashMap<String, List<Double>> concatGenesSV = getFrom(genesSV, concatFoundGenes);
 		System.out.println("File size : " + concatGenesSV.size());
 
