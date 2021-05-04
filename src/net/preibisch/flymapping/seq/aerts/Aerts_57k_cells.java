@@ -3,8 +3,8 @@ package net.preibisch.flymapping.seq.aerts;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonReader;
-import net.preibisch.flymapping.tools.PathsUtils;
 import net.preibisch.flymapping.tools.TxtProcess;
+import org.apache.commons.io.FilenameUtils;
 
 import java.io.*;
 import java.util.*;
@@ -35,9 +35,9 @@ public class Aerts_57k_cells {
 		return "Size: " + elments.size() + "List: " + elments.values().iterator().next().size();
 	}
 
-	public static int toChuncks(File input, File output_folder, String output_name, int chunk) throws IOException {
+	public static int toChuncks(File input, File output_folder,  int chunk) throws IOException {
 		int i = 0, n_chunk = 0;
-
+		String output_name = FilenameUtils.removeExtension(input.getName());
 		long col = TxtProcess.columns(input);
 		long lines = TxtProcess.lines(input);
 		List<String> linesNames = new ArrayList<>();
@@ -52,18 +52,21 @@ public class Aerts_57k_cells {
 
 		HashMap<String, List<String>> elements = new HashMap<String, List<String>>();
 
-		String outName = "head_" + output_name + ".json";
-		File outFile = PathsUtils.Result(output_folder, outName);
 
-		createHeadFile(outFile, sc.nextLine());
+
+		File resultSubfolder = new File(output_folder,output_name);
+		resultSubfolder.mkdirs();
+		String outName = "head_" + output_name + ".json";
+		File resultFile = new File(resultSubfolder,outName);
+		createHeadFile(resultFile, sc.nextLine());
 
 		while (sc.hasNextLine()) {
 			if (i >= chunk) {
 				outName = n_chunk + "_" + output_name + ".json";
-				outFile = PathsUtils.Result(output_folder, outName);
-				save(chunk, outFile, elements);
+				resultFile = new File(resultSubfolder,outName);
+				save(chunk, resultFile, elements);
 
-				System.out.println(n_chunk + "/" + totalChunks + " | " + outFile);
+				System.out.println(n_chunk + "/" + totalChunks + " | " + resultFile.getAbsolutePath());
 				n_chunk++;
 				elements.clear();
 				i = 0;
@@ -79,12 +82,12 @@ public class Aerts_57k_cells {
 		}
 
 		outName = "rows_" + output_name + ".json";
-		outFile = PathsUtils.Result(output_folder, outName);
-		save(outFile, linesNames);
+		resultFile = new File(resultSubfolder,outName);
+		save(resultFile, linesNames);
 
 		outName = n_chunk + "_" + output_name + ".json";
-		outFile = PathsUtils.Result(output_folder, outName);
-		save(chunk, outFile, elements);
+		resultFile = new File(resultSubfolder,outName);
+		save(chunk,resultFile, elements);
 		return n_chunk;
 	}
 

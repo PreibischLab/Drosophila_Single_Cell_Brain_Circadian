@@ -1,15 +1,6 @@
 package net.preibisch.flymapping.headless;
 
-import static net.preibisch.flymapping.tools.GsonIO.read;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import com.google.gson.reflect.TypeToken;
-
 import ij.ImagePlus;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.img.display.imagej.ImageJFunctions;
@@ -26,6 +17,14 @@ import net.preibisch.flymapping.tools.GsonIO;
 import net.preibisch.flymapping.tools.ImgUtils;
 import net.preibisch.flymapping.tools.PathsUtils;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static net.preibisch.flymapping.tools.GsonIO.read;
+
 public class CellLookupFlow {
 	public static void main(String[] args) throws IOException {
 
@@ -34,7 +33,7 @@ public class CellLookupFlow {
 
 		System.out.println("Concat Genes Size :" + concatFoundGenes.size());
 
-		File input = PathsUtils.File(AertsPaths.aerts_57k_cells_raw);
+		File input = PathsUtils.getInputPathForFile(AertsPaths.aerts_57k_cells_raw);
 
 		Integer max = Aerts_57k_cells.getMaxExpressed(input);
 		System.out.println("Max val: " + max);
@@ -53,7 +52,7 @@ public class CellLookupFlow {
 		System.out.println("Janila IDs for supervoxels Size :" + janilaIDsForSuperVoxels.size());
 
 		// For GenerateImg
-		long[] dims = ImgUtils.getDims(ImgUtils.openImg(PathsUtils.File(ImgPaths.SUPER_VOXEL)));
+		long[] dims = ImgUtils.getDims(ImgUtils.openImg(PathsUtils.getInputPathForFile(ImgPaths.SUPER_VOXEL)));
 
 		System.out.println("Supervoxel dims :" + dims.length);
 

@@ -29,20 +29,20 @@ public class FlowV2 {
 	public static void main(String[] args) throws IOException {
 
 		// For CellLokup
-		List<String> concatFoundGenes = GsonIO.read(PathsUtils.ResultFile(ResultsPaths.concat_genes), List.class);
+		List<String> concatFoundGenes = GsonIO.read(PathsUtils.getPathForResultFile(ResultsPaths.concat_genes), List.class);
 
 		System.out.println("Concat Genes Size :" + concatFoundGenes.size());
 
-		File input = PathsUtils.File(AertsPaths.aerts_57k_cells_raw);
+		File input = PathsUtils.getInputPathForFile(AertsPaths.aerts_57k_cells_raw);
 
 		// For CellVoxels
-		Map<String, List<String>> janilaIDsPerGenes = GsonIO.read(PathsUtils.ResultFile(ResultsPaths.JanilaIDsPerGenes),
+		Map<String, List<String>> janilaIDsPerGenes = GsonIO.read(PathsUtils.getPathForResultFile(ResultsPaths.JanilaIDsPerGenes),
 				new TypeToken<Map<String, List<String>>>() {
 				}.getType());
 
 		System.out.println("Janila IDs Per Genes Size :" + janilaIDsPerGenes.size());
 
-		List<String> janilaIDsForSuperVoxels = read(PathsUtils.ResultFile(ResultsPaths.JanilaIDsForSuperVoxels),
+		List<String> janilaIDsForSuperVoxels = read(PathsUtils.getPathForResultFile(ResultsPaths.JanilaIDsForSuperVoxels),
 				new TypeToken<List<String>>() {
 				}.getType());
 
@@ -52,16 +52,16 @@ public class FlowV2 {
 		System.out.println("Max val: " + max);
 
 		// For GenerateImg
-		long[] dims = ImgUtils.getDims(ImgUtils.openImg(PathsUtils.File(ImgPaths.SUPER_VOXEL)));
+		long[] dims = ImgUtils.getDims(ImgUtils.openImg(PathsUtils.getInputPathForFile(ImgPaths.SUPER_VOXEL)));
 
 		System.out.println("Supervoxel dims :" + dims.length);
 
 		Map<Integer, List<List<Integer>>> supervoxelHashMap = GsonIO.read(
-				PathsUtils.ResultFile(ImgPaths.SUPER_VOXEL_HASHMAP),
+				PathsUtils.getPathForResultFile(ImgPaths.SUPER_VOXEL_HASHMAP),
 				new TypeToken<Map<Integer, List<List<Integer>>>>() {
 				}.getType());
 
-		File file = PathsUtils.ResultFileFromString("ConcatGenesSV");
+		File file = PathsUtils.getPathForResultFile("ConcatGenesSV.json");
 
 		HashMap<String, List<Double>> concatGenesSV = GsonIO.read(file, new TypeToken<HashMap<String, List<Double>>>() {
 		}.getType());
@@ -107,7 +107,7 @@ public class FlowV2 {
 				ImagePlus resultImgPlus = ImageJFunctions.wrap(resultImg, "");
 				resultImgPlus.setDimensions(1, (int) resultImg.dimension(2), 1);
 
-				String imgPath = PathsUtils.ResultFile("SV_" + i + "_" + cellExample + ".tiff").getAbsolutePath();
+				String imgPath = PathsUtils.getPathForResultFile("SV_" + i + "_" + cellExample + ".tiff").getAbsolutePath();
 				ij.IJ.save(resultImgPlus, imgPath);
 
 				System.out.println("Img saved : " + imgPath);
