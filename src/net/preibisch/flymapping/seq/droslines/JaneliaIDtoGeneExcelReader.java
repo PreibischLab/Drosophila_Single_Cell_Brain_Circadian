@@ -1,28 +1,20 @@
 package net.preibisch.flymapping.seq.droslines;
 
+import net.preibisch.flymapping.seq.ResultsPaths;
+import net.preibisch.flymapping.tools.GsonIO;
+import net.preibisch.flymapping.tools.PathsUtils;
+import org.apache.commons.collections4.map.HashedMap;
+import org.apache.poi.ss.usermodel.*;
+
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.collections4.map.HashedMap;
-import org.apache.poi.EncryptedDocumentException;
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-import org.apache.poi.ss.usermodel.DataFormatter;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.ss.usermodel.WorkbookFactory;
-
-import net.preibisch.flymapping.seq.ResultsPaths;
-import net.preibisch.flymapping.tools.GsonIO;
-import net.preibisch.flymapping.tools.PathsUtils;
-
 public class JaneliaIDtoGeneExcelReader {
 
-	public static void main(String[] args) throws EncryptedDocumentException, InvalidFormatException, IOException {
+	public static void main(String[] args) throws Exception {
 
 		Map<String, List<String>> janilaIDsPerGenes = getJanilaIDsPerGene();
 
@@ -35,7 +27,7 @@ public class JaneliaIDtoGeneExcelReader {
 //		System.out.println(janilaMapId.get("GMR19G07"));
 	}
 
-	public static Map<String,String> getJanilaGeneMap() throws EncryptedDocumentException, InvalidFormatException, IOException{
+	public static Map<String,String> getJanilaGeneMap() throws Exception{
 		File f = PathsUtils.File(DrosLinesPaths.Janelia_map_janelia_IDtoGene_name);
 		Workbook workbook = WorkbookFactory.create(f);
 		HashedMap<String, String> janilaMapId = new HashedMap();
@@ -53,7 +45,7 @@ public class JaneliaIDtoGeneExcelReader {
 	}
 	
 	public static Map<String, List<String>> getJanilaIDsPerGene()
-			throws EncryptedDocumentException, InvalidFormatException, IOException {
+			throws Exception {
 
 		File f = PathsUtils.File(DrosLinesPaths.Janelia_map_janelia_IDtoGene_name);
 		Workbook workbook = WorkbookFactory.create(f);

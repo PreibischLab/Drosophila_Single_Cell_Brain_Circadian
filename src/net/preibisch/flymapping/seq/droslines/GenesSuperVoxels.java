@@ -1,21 +1,19 @@
 package net.preibisch.flymapping.seq.droslines;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-
-import org.apache.poi.EncryptedDocumentException;
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-
 import com.google.gson.reflect.TypeToken;
-
 import net.preibisch.flymapping.seq.ResultsPaths;
 import net.preibisch.flymapping.tools.GsonIO;
 import net.preibisch.flymapping.tools.ListsUtil;
 import net.preibisch.flymapping.tools.PathsUtils;
 import net.preibisch.flymapping.tools.TxtProcess;
+import org.apache.poi.EncryptedDocumentException;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
 
 public class GenesSuperVoxels {
 	private final static String ConcatGenesSV = "ConcatGenesSV";
@@ -72,7 +70,7 @@ public class GenesSuperVoxels {
 		return elements;
 	}
 
-	private static void generateGenesSV() throws IOException, EncryptedDocumentException, InvalidFormatException {
+	private static void generateGenesSV() throws Exception {
 		File dros_lines_expr_values_2083_genes_raw_path = PathsUtils
 				.File(DrosLinesPaths.dros_lines_expr_values_2083_genes);
 		TxtProcess.infos(dros_lines_expr_values_2083_genes_raw_path);

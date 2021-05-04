@@ -13,6 +13,7 @@ import java.util.concurrent.Callable;
  * 1899 cells for 57k genes
  * from Aerts single cell paper 2018. this is more deep and more cells so we should start with this data
  */
+@CommandLine.Command
 public class Prepare_aerts_57k_cells_raw implements Callable<Void> {
 
 	public static void main(String[] args) throws IOException {

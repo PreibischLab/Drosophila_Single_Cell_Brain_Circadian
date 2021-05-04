@@ -2,23 +2,22 @@ package net.preibisch.flymapping.tools;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.nio.file.Paths;
 
 public class PathsUtils {
 	public static File Data() throws FileNotFoundException {
-		File f = new File(Paths.get("").toAbsolutePath().getParent().getParent().resolve(MyPaths.SEQUENCING_FOLDER).toString());
+		File f = new File(MyPaths.DATA_FOLDER,MyPaths.SEQUENCING_FOLDER);
 		if(!(f.isDirectory()&&(f.exists()))) throw new FileNotFoundException();
 		return f;	
 	}
 	
-	public static File Result() throws FileNotFoundException {
-		File f = new File(Data(),MyPaths.RESULT_FOLDER);
+	public static File Result() {
+		File f = new File(MyPaths.DATA_FOLDER,MyPaths.RESULT_FOLDER);
 		if(!(f.isDirectory()&&(f.exists()))) f.mkdir();
 		return f;	
 	}
 	
 	public static File ResultFolder(String file) throws FileNotFoundException {
-		File f = new File(Result(),MyPaths.RESULT_FOLDER);
+		File f = new File(Result(),file);
 		if(!(f.isDirectory()&&(f.exists()))) f.mkdir();
 		return f;	
 	}

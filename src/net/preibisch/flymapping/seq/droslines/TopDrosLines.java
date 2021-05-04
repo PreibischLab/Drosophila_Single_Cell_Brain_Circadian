@@ -1,19 +1,16 @@
 package net.preibisch.flymapping.seq.droslines;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.Callable;
-
-import org.apache.poi.EncryptedDocumentException;
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-
 import net.preibisch.flymapping.tools.GsonIO;
 import net.preibisch.flymapping.tools.PathsUtils;
 import net.preibisch.flymapping.tools.TxtProcess;
 import picocli.CommandLine;
 import picocli.CommandLine.Option;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.Callable;
 
 public class TopDrosLines implements Callable<Void> {
 
@@ -28,7 +25,7 @@ public class TopDrosLines implements Callable<Void> {
 	}
 
 	@Override
-	public Void call() throws IOException, EncryptedDocumentException, InvalidFormatException {
+	public Void call() throws Exception {
 		x = 0.4f;
 
 		System.out.println("Start get Top " + x);
