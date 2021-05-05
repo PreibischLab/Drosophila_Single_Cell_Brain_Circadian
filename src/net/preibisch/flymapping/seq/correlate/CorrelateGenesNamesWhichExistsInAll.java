@@ -11,6 +11,8 @@ import net.preibisch.flymapping.tools.PathsUtils;
 import net.preibisch.flymapping.tools.TxtProcess;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -22,58 +24,72 @@ import java.util.Map;
  * The goal of this class is to get the genes that exists in both of them, should be <= 2204
  */
 public class CorrelateGenesNamesWhichExistsInAll {
-	public static void main(String[] args) throws Exception {
+    public static void main(String[] args) throws Exception {
 
-		// 1- from Dros lines
-		
-		// one line with 2083 columns contains the Janilla genes names
-		// exmpl name GMR_10C06_AE_01
-		// we convert it to Excel file name GMR_10C06_AE_01 => GMR10C06
-		File iDGenespath = PathsUtils.getInputPathForFile(DrosLinesPaths.dros_linesIDtoJaneliaID);
+        // 1- from Dros lines
 
-		System.out.println("Get infos..");
-		TxtProcess.infos(iDGenespath);
+        // one line with 2083 columns contains the Janilla genes names
+        // exmpl name GMR_10C06_AE_01
+        // we convert it to Excel file name GMR_10C06_AE_01 => GMR10C06
+        File iDGenespath = PathsUtils.getInputPathForFile(DrosLinesPaths.dros_linesIDtoJaneliaID);
 
-		// Getting Mapping name from Excel file
-		// From janila name to gene name
-		Map<String, String> janilaMapId = JaneliaIDtoGeneExcelReader.getJanilaGeneMap();
+        System.out.println("Get infos..");
+        TxtProcess.infos(iDGenespath);
 
-		// Result file
-		// List 2083 genes Janila ids ( Exmpl: GMR10C06 ) with map of id of supervoxel
-		// and probability of expression inside
-		List<String> drosLinesGenes = Dros_lines.getExpressedGenes(iDGenespath, janilaMapId);
+        // Getting Mapping name from Excel file
+        // From janila name to gene name
+        Map<String, String> janilaMapId = JaneliaIDtoGeneExcelReader.getJanilaGeneMap();
 
-		System.out.println("Final Dros lines genes = " + drosLinesGenes.size());
+        List<String> genes = findWithoutRepetitionGenes(janilaMapId.values());
 
-		// Save it to file
-		File resultFile = PathsUtils.getPathForResultFile(DrosLinesPaths.dros_lines_expressed_genes_names);
-		GsonIO.save(resultFile, drosLinesGenes);
-		
+        System.out.println("Genes without repetitions: " + genes.size());
+        // Result file
+        // List 2083 genes Janila ids ( Exmpl: GMR10C06 ) with map of id of supervoxel
+        // and probability of expression inside
+        // list of names of genes that exists in dros line
+        List<String> drosLinesGenes = Dros_lines.getExpressedGenes(iDGenespath, janilaMapId);
 
-		//2- from Aerts
+        System.out.println("Final Dros lines genes = " + drosLinesGenes.size());
 
-		File aertsInput = PathsUtils.getInputPathForFile(AertsPaths.aerts_57k_cells_raw);
-		System.out.println("Get infos..");
-		TxtProcess.infos(iDGenespath);
-		List<String> aertsGenes = Aerts_57k_cells.getGenesNames(aertsInput);
-		System.out.println("Final Aerts genes  : " + aertsGenes.size());
+        // Save it to file
+        File resultFile = PathsUtils.getPathForResultFile(DrosLinesPaths.dros_lines_expressed_genes_names);
+        GsonIO.save(resultFile, drosLinesGenes);
 
-		// Save it to file
+
+        //2- from Aerts
+
+        File aertsInput = PathsUtils.getInputPathForFile(AertsPaths.aerts_57k_cells_scalesd);
+        System.out.println("Get infos..");
+        TxtProcess.infos(aertsInput);
+        // List of names of genes of Aerts
+        List<String> aertsGenes = Aerts_57k_cells.getGenesNames(aertsInput);
+        System.out.println("Final Aerts genes  : " + aertsGenes.size());
+
+        // Save it to file
 //		resultFile = PathsUtils.ResultFile(AertsPaths.aerts_57k_genes_names);
 //		GsonIO.save(resultFile, aertsGenes);
-		
-		
-		//3- Get similarity
-		List<String> concat = concat(drosLinesGenes,aertsGenes);
-		System.out.println("Final concat genes  : " + concat.size());
 
-		// Save it to file
-		resultFile = PathsUtils.getPathForResultFile(ResultsPaths.GenesNamesWhichExistsInAertsAndDrosLines);
-		GsonIO.save(resultFile, concat);
-	}
 
-	private static List<String> concat(List<String> drosLinesGenes, List<String> aertsGenes) {
-		drosLinesGenes.retainAll(aertsGenes);
-		return drosLinesGenes;
-	}
+        //3- Get similarity
+        List<String> concat = concat(drosLinesGenes, aertsGenes);
+        System.out.println("Final concat genes  : " + concat.size());
+
+        // Save it to file
+        resultFile = PathsUtils.getPathForResultFile(ResultsPaths.GenesNamesWhichExistsInAertsAndDrosLines);
+        GsonIO.save(resultFile, concat);
+    }
+
+    private static List<String> findWithoutRepetitionGenes(Collection<String> values) {
+        List<String> result = new ArrayList<>();
+        for (String v : values)
+            if (!result.contains(v))
+                result.add(v);
+
+        return result;
+    }
+
+    private static List<String> concat(List<String> drosLinesGenes, List<String> aertsGenes) {
+        drosLinesGenes.retainAll(aertsGenes);
+        return drosLinesGenes;
+    }
 }
