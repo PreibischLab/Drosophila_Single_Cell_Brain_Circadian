@@ -1,12 +1,8 @@
 package net.preibisch.flymapping.flow;
 
-import java.io.FileNotFoundException;
-import java.util.List;
-import java.util.Map;
-
 import com.google.gson.reflect.TypeToken;
-
 import ij.ImagePlus;
+import net.imglib2.Cursor;
 import net.imglib2.RandomAccess;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.img.Img;
@@ -19,6 +15,10 @@ import net.preibisch.flymapping.seq.ClustersExamples;
 import net.preibisch.flymapping.tools.GsonIO;
 import net.preibisch.flymapping.tools.ImgUtils;
 import net.preibisch.flymapping.tools.PathsUtils;
+
+import java.io.FileNotFoundException;
+import java.util.List;
+import java.util.Map;
 
 public class GenerateImg {
 
@@ -86,6 +86,43 @@ public class GenerateImg {
 
 		return result;
 	}
+
+
+	public static RandomAccessibleInterval<FloatType> generateImgV2(RandomAccessibleInterval<FloatType> supervoxelImage,Map<Integer, Float> supervoxelExpression) {
+
+		// create the ImgFactory based on cells (cellsize = 5x5x5...x5) that will
+		// instantiate the Img
+		final ImgFactory<FloatType> imgFactory = new CellImgFactory<>(new FloatType(), 5);
+		long[] dims = ImgUtils.getDims(supervoxelImage);
+		// create an 3d-Img with dimensions 20x30x40 (here cellsize is 5x5x5)Ø
+		final Img<FloatType> result = imgFactory.create(dims);
+
+		Cursor< FloatType > targetCursor = result.localizingCursor();
+		RandomAccess<FloatType> sourceRandomAccess = supervoxelImage.randomAccess();
+
+		// iterate over the input cursor
+		while ( targetCursor.hasNext())
+		{
+			// move input cursor forward
+			targetCursor.fwd();
+
+			// set the output cursor to the position of the input cursor
+			sourceRandomAccess.setPosition( targetCursor );
+
+			// set the value of this pixel of the output image, every Type supports T.set( T type )
+			int sv = (int) sourceRandomAccess.get().get();
+//			System.out.println(sv);
+			Float value = 0.0f;
+			if(sv > 0){
+				value = supervoxelExpression.get(sv);
+//				System.out.println(value);
+			}
+			targetCursor.get().set( value );
+		}
+
+		return result;
+	}
+
 
 	private static long[] convertPosition(List<Integer> pos) {
 		long[] p = new long[pos.size()];
