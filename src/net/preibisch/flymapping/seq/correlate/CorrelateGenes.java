@@ -16,6 +16,19 @@ public class CorrelateGenes {
 		}
 		result = result / n;
 		return result;
+	}
 
+	public static Float correlate(Map<String, Float> cellGenes,  Map<String,Float> svGenes) {
+		Float result = 0.0f;
+		int n = cellGenes.size();
+		for (String gene : cellGenes.keySet()) {
+			Float genevalue1 = cellGenes.get(gene);
+			Float geneValue2 = svGenes.get(gene);
+			Float tmp = genevalue1*geneValue2;
+			result += tmp;
+
+		}
+//		result = result / n;
+		return result;
 	}
 }

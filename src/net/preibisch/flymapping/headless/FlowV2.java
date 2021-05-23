@@ -36,7 +36,7 @@ public class FlowV2 {
 		File input = PathsUtils.getInputPathForFile(AertsPaths.aerts_57k_cells_raw);
 
 		// For CellVoxels
-		Map<String, List<String>> janilaIDsPerGenes = GsonIO.read(PathsUtils.getPathForResultFile(ResultsPaths.JanilaIDsPerGenes),
+		Map<String, List<String>> janilaIDsPerGenes = GsonIO.read(PathsUtils.getInputPathForFile(ResultsPaths.JanilaIDsPerGenes),
 				new TypeToken<Map<String, List<String>>>() {
 				}.getType());
 
