@@ -36,13 +36,9 @@ public class AertsCells_same_genes_as_supervoxels {
         Scanner sc = new Scanner(input, "UTF-8");
 
         String[] lineone = sc.nextLine().split("\t");
-<<<<<<< HEAD
 
         cells = Arrays.asList(lineone).subList(1, lineone.length);
 
-=======
-        cells = Arrays.asList(lineone).subList(1,lineone.length);
->>>>>>> 4f592aaeec054603a4db118482d34799e9145a7b
         matrix = new ArrayList<>();
         genes = new ArrayList<>();
         while (sc.hasNextLine()) {
@@ -71,7 +67,6 @@ public class AertsCells_same_genes_as_supervoxels {
     }
 
     public Map<String, Float> getGenesExpressionForOneCell(String cellExample) {
-<<<<<<< HEAD
 
         System.out.println("Looking for cell: " + cellExample);
         Map<String, Float> genesExpression = new HashMap<>();
@@ -92,19 +87,6 @@ public class AertsCells_same_genes_as_supervoxels {
         for (int i = 0; i < genes.size(); i++) {
             genesExpression.put(genes.get(i), matrix.get(i).get(index));
 
-=======
-        System.out.println("Looking for cell: "+cellExample);
-        Map<String,Float> genesExpression = new HashMap<>();
-        int index = cells.indexOf(cellExample);
-        if(index<=0){
-            throw new IllegalArgumentException("Cell "+cellExample+" not found !");
-        }
-
-        System.out.println("Cell found at position: "+index);
-
-        for(int i =0;i<genes.size();i++){
-            genesExpression.put(genes.get(i),matrix.get(i).get(index));
->>>>>>> 4f592aaeec054603a4db118482d34799e9145a7b
         }
         return genesExpression;
     }
