@@ -70,14 +70,14 @@ public class AertsCells_same_genes_as_supervoxels {
 
         System.out.println("Looking for cell: " + cellExample);
         Map<String, Float> genesExpression = new HashMap<>();
-        int index = -1;
-        for (int i = 0; i < cells.size(); i++) {
-            if (cells.get(i).contains(cellExample)) {
-                index = i;
-                break;
-            }
-        }
-//        int index = cells.indexOf(cellExample);
+//        int index = -1;
+//        for (int i = 0; i < cells.size(); i++) {
+//            if (cells.get(i).contains(cellExample)) {
+//                index = i;
+//                break;
+//            }
+//        }
+        int index = cells.indexOf(cellExample);
         if (index <= 0) {
             throw new IllegalArgumentException("Cell " + cellExample + " not found !");
         }

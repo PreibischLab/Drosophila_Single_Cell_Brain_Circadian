@@ -12,5 +12,8 @@ public class ClustersExamples {
 	public static final String[] cluster_80 = { "CGTTAGATCCTTTACA-DGRP-551_0d_r1", "CGAACATCAGGGTACA-DGRP-551_1d_r1",
 			"GCACTCTCAACTTGAC-DGRP-551_1d_r1", "TAGCCGGCAGCCTTTC-DGRP-551_1d_r1", "CAACCTCGTTAGTGGG-DGRP-551_0d_r1" };
 
-	public static final String[][] clusters = { cluster_2, cluster_5, cluster_25, cluster_50, cluster_80 };
+//	public static final String[] random_Cluster = {"GTGTTAGTCATAAAGG.1","GAATGAAGTGGAAAGA.3","AGTCTTTTCCGTACAA.4","AGCTCCTCAATGGACG.5"};
+
+
+	public static final String[][] clusters = { cluster_2,cluster_5,cluster_25,cluster_50,cluster_80 };
 }
