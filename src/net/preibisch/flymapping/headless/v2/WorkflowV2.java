@@ -5,7 +5,6 @@ import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.img.display.imagej.ImageJFunctions;
 import net.imglib2.type.numeric.real.FloatType;
 import net.preibisch.flymapping.flow.GenerateImg;
-import net.preibisch.flymapping.seq.ClustersExamples;
 import net.preibisch.flymapping.seq.correlate.CorrelateGenes;
 import net.preibisch.flymapping.tools.ImgUtils;
 
@@ -16,9 +15,13 @@ import java.util.Map;
 
 public class WorkflowV2 {
 
-    //    private static final String[] cellExample = new String[]{"AAACGGGGTAGCCTAT.1"};
+        private static final String[] cellExample = new String[]{"AAACGGGGTAGCCTAT.1"};
+    private static final String[][] clusters = { cellExample};
     private static final String supervoxelImagePath = "/Users/Marwan/Desktop/SingleCellProject/img/180628_supervoxel.tif";
     private static final String outputFolderPath = "/Users/Marwan/Desktop/SingleCellProject/GeneratedImages";
+
+    private static final boolean AERTS_LOW_MEMORY = true;
+    private static final boolean SUPERVOXELS_LOW_MEMORY = false;
 
     public static void main(String[] args) throws IOException {
 
@@ -28,15 +31,15 @@ public class WorkflowV2 {
         System.out.println("Supervoxels: " + imageSupervoxelFile.getPath());
         RandomAccessibleInterval<FloatType> supervoxelImage = ImgUtils.openImg(imageSupervoxelFile);
 
-        Refined_genes_vs_supervoxels genesVsSupervoxels = new Refined_genes_vs_supervoxels(new File(Refined_genes_vs_supervoxels.path));
+        Refined_genes_vs_supervoxels genesVsSupervoxels = new Refined_genes_vs_supervoxels(new File(Refined_genes_vs_supervoxels.path),SUPERVOXELS_LOW_MEMORY);
 
-        AertsCells_same_genes_as_supervoxels cellsVsGenes = new AertsCells_same_genes_as_supervoxels(new File(AertsCells_same_genes_as_supervoxels.path));
+        AertsCells_same_genes_as_supervoxels cellsVsGenes = new AertsCells_same_genes_as_supervoxels(new File(AertsCells_same_genes_as_supervoxels.path),AERTS_LOW_MEMORY);
         // For GenerateImg
 
-        for (int k = 0; k < ClustersExamples.clusters.length; k++) {
+        for (int k = 0; k < clusters.length; k++) {
             File outputFolder = new File(outputFolderPath,"Cluster_"+k);
             outputFolder.mkdirs();
-            for (String cell : ClustersExamples.clusters[k]) {
+            for (String cell : clusters[k]) {
                 String cellExample = cell.split("-")[0];
                 Map<String, Float> geneExpressionForCell = cellsVsGenes.getGenesExpressionForOneCell(cellExample);
 
@@ -45,6 +48,7 @@ public class WorkflowV2 {
                 for (int i = 0; i < numberSV; i++) {
                     Map<String, Float> expressionForSupervoxel = genesVsSupervoxels.getExpressionForSuperVoxel(i);
                     Float expression = CorrelateGenes.correlate(geneExpressionForCell, expressionForSupervoxel);
+
 //            System.out.println("sv: "+i+"-"+expression);
                     expressionPerSupervoxels.put(i + 1, expression);
                 }
