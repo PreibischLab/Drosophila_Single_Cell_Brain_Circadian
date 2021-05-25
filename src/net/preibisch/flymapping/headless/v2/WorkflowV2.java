@@ -2,12 +2,13 @@ package net.preibisch.flymapping.headless.v2;
 
 import ij.ImagePlus;
 import net.imglib2.RandomAccessibleInterval;
+import net.imglib2.img.Img;
 import net.imglib2.img.display.imagej.ImageJFunctions;
 import net.imglib2.type.numeric.real.FloatType;
 import net.preibisch.flymapping.flow.GenerateImg;
 import net.preibisch.flymapping.seq.ClustersExamples;
 import net.preibisch.flymapping.seq.correlate.CorrelateGenes;
-import net.preibisch.flymapping.tools.ImgUtils;
+import net.preibisch.flymapping.tools.IOFunctions;
 
 import java.io.File;
 import java.io.IOException;
@@ -26,7 +27,7 @@ public class WorkflowV2 {
 //        Load image supervoxel
         File imageSupervoxelFile = new File(supervoxelImagePath);
         System.out.println("Supervoxels: " + imageSupervoxelFile.getPath());
-        RandomAccessibleInterval<FloatType> supervoxelImage = ImgUtils.openImg(imageSupervoxelFile);
+        Img<FloatType> supervoxelImage = IOFunctions.openAs32Bit(imageSupervoxelFile);
 
         Refined_genes_vs_supervoxels genesVsSupervoxels = new Refined_genes_vs_supervoxels(new File(Refined_genes_vs_supervoxels.path));
 
